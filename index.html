@@ -825,6 +825,8 @@
         link.download = `cade-conify-${timestamp}.png`;
         link.href = tempCanvas.toDataURL('image/png');
         link.click();
+
+        console.log('Downloaded with glow effect');
       } catch (e) {
         console.error('Download failed:', e);
         // Fallback: download without glow
