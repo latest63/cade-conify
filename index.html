@@ -277,8 +277,6 @@
           <div class="frame-grid">
             <button class="frame-btn active" data-frame="rect-1" onclick="selectFrame(this)">⬜ Rect 1</button>
             <button class="frame-btn" data-frame="rect-2" onclick="selectFrame(this)">⬜ Rect 2</button>
-            <button class="frame-btn" data-frame="circular-1" onclick="selectFrame(this)">💫 Ring 1</button>
-            <button class="frame-btn" data-frame="circular-2" onclick="selectFrame(this)">💫 Ring 2</button>
           </div>
         </div>
 
@@ -334,40 +332,15 @@
       draw();
     };
     
-    // Frames
-    const frameImages = {
-      'circular-1': null,
-      'circular-2': null,
-      'circular-3': null,
-      'circular-4': null
-    };
-
-    // Load circular frame images
-    const circularFileNames = {
-      'circular-1': 'frame1.png',
-      'circular-2': 'frame2.png',
-      'circular-3': 'frame3.png',
-      'circular-4': 'frame4.png'
-    };
-
-    let framesLoaded = 0;
-    for (const [key, file] of Object.entries(circularFileNames)) {
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        frameImages[key] = img;
-        framesLoaded++;
-        if (framesLoaded === 4) draw();
-      };
-      img.src = file;
-    }
+    // Frames - rectangular only
+    // No image files needed, drawn with canvas strokeRect
 
     // Draw rectangular frames (no fill, just outline)
     function drawRectFrame(ctx, x, y, w, h, style) {
       ctx.strokeStyle = style.color || '#FF9D00';
       ctx.lineWidth = style.width || 6;
       if (style.dashed) ctx.setLineDash(style.dashPattern || [12, 6]);
-      
+
       ctx.strokeRect(x + 8, y + 8, w - 16, h - 16);
       ctx.setLineDash([]);
     }
@@ -377,59 +350,25 @@
       // Clear
       ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw frame
-      const isCircular = currentFrame.startsWith('circular');
-      const frameImg = frameImages[currentFrame];
-      
-      if (isCircular && frameImg) {
-        // Circular frame
-        const frameSize = 420;
-        const frameX = (canvas.width - frameSize) / 2;
-        const frameY = (canvas.height - frameSize) / 2;
-        
-        // Clip to circle
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(frameX + frameSize/2, frameY + frameSize/2, frameSize/2 - 2, 0, Math.PI * 2);
-        ctx.clip();
-        
-        // Draw PFP scaled
-        if (backgroundImage) {
-          const w = backgroundImage.naturalWidth * pfpScale;
-          const h = backgroundImage.naturalHeight * pfpScale;
-          const x = frameX + (frameSize - w) / 2;
-          const y = frameY + (frameSize - h) / 2;
-          ctx.drawImage(backgroundImage, x, y, w, h);
-        } else {
-          ctx.fillStyle = '#2a2a2a';
-          ctx.fillRect(frameX, frameY, frameSize, frameSize);
-        }
-        
-        ctx.restore();
-        
-        // Draw frame overlay
-        ctx.drawImage(frameImg, frameX, frameY, frameSize, frameSize);
-      } else if (currentFrame.startsWith('rect')) {
-        // Rectangular frame - no background color, just outline
-        const rectStyles = {
-          'rect-1': { color: '#FF9D00', width: 6 },
-          'rect-2': { color: '#8B2CFF', width: 8, dashed: true, dashPattern: [15, 8] }
-        };
-        const style = rectStyles[currentFrame] || rectStyles['rect-1'];
-        
-        // Draw PFP scaled to fill canvas
-        if (backgroundImage) {
-          ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-        } else {
-          ctx.fillStyle = '#2a2a2a';
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-        }
-        
-        // Draw frame border
-        drawRectFrame(ctx, 0, 0, canvas.width, canvas.height, style);
+
+      // Rectangular frame - no background color, just outline
+      const rectStyles = {
+        'rect-1': { color: '#FF9D00', width: 6 },
+        'rect-2': { color: '#8B2CFF', width: 8, dashed: true, dashPattern: [15, 8] }
+      };
+      const style = rectStyles[currentFrame] || rectStyles['rect-1'];
+
+      // Draw PFP scaled to fill canvas
+      if (backgroundImage) {
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+      } else {
+        ctx.fillStyle = '#2a2a2a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
-      
+
+      // Draw frame border
+      drawRectFrame(ctx, 0, 0, canvas.width, canvas.height, style);
+
       // Draw cone elements
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
