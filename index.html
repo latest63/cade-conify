@@ -824,7 +824,11 @@
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
         link.download = `cade-conify-${timestamp}.png`;
         link.href = tempCanvas.toDataURL('image/png');
+        
+        // Trigger download
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
 
         console.log('Downloaded with glow effect');
       } catch (e) {
@@ -834,7 +838,10 @@
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
         link.download = `cade-conify-${timestamp}.png`;
         link.href = canvas.toDataURL('image/png');
+        
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
       }
 
       // Restore selection
