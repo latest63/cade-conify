@@ -813,8 +813,8 @@
 
         // Create a temp canvas with glow effect
         const tempCanvas = document.createElement('canvas');
-        tempCanvas.width = canvas.width;
-        tempCanvas.height = canvas.height;
+        tempCanvas.width = canvas.width + 60;  // Extra space for glow
+        tempCanvas.height = canvas.height + 60;
         const tempCtx = tempCanvas.getContext('2d');
 
         if (!tempCtx) {
@@ -822,15 +822,23 @@
           return;
         }
 
-        // Draw glow border (30px spread)
+        // Fill background
+        tempCtx.fillStyle = '#101010';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+
+        // Draw multiple layers of glow (30px spread on each side)
         tempCtx.shadowColor = 'rgba(255, 157, 0, 0.5)';
         tempCtx.shadowBlur = 30;
         tempCtx.strokeStyle = '#FF9D00';
-        tempCtx.lineWidth = 1;
-        tempCtx.strokeRect(0, 0, canvas.width, canvas.height);
+        tempCtx.lineWidth = 2;
+        tempCtx.strokeRect(30, 30, canvas.width, canvas.height);
 
-        // Draw the actual canvas content
-        tempCtx.drawImage(canvas, 0, 0);
+        // Draw a second pass for stronger glow
+        tempCtx.shadowBlur = 50;
+        tempCtx.strokeRect(30, 30, canvas.width, canvas.height);
+
+        // Draw the actual canvas content centered
+        tempCtx.drawImage(canvas, 30, 30);
 
         // Get data URL
         const dataUrl = tempCanvas.toDataURL('image/png');
