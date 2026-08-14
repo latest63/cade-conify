@@ -430,6 +430,12 @@
     const coneImage = new Image();
     coneImage.src = 'cone.png';
     coneImage.crossOrigin = 'anonymous';
+    let coneImageLoaded = false;
+    
+    coneImage.onload = () => {
+      coneImageLoaded = true;
+      draw(); // Redraw if image was loaded after initial draw
+    };
     
     // Frame configurations
     const frames = {
@@ -578,6 +584,12 @@
     }
     
     function addCone() {
+      // Wait for image to load if not ready yet
+      if (!coneImageLoaded && !coneImage.complete) {
+        setTimeout(addCone, 50); // Try again in 50ms
+        return;
+      }
+      
       const frame = frames[currentFrame];
       const el = {
         type: 'image',
