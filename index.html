@@ -189,7 +189,12 @@
     }
 
     .delete-btn {
-      background: var(--red);
+      background: #ff4444;
+      color: #fff;
+    }
+
+    .cone-btn {
+      background: var(--purple);
       color: #fff;
     }
 
@@ -205,6 +210,40 @@
     }
 
     .hint-bar strong { color: var(--orange); }
+
+    /* Slider styling */
+    .slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: #888;
+      text-transform: uppercase;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 4px;
+      background: #333;
+      border-radius: 2px;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      background: var(--orange);
+      border-radius: 50%;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -220,7 +259,7 @@
           <canvas id="canvas" width="500" height="500"></canvas>
         </div>
         <div class="hint-bar">
-          <strong>Tap</strong> canvas to place cone · <strong>Drag</strong> to move
+          <strong>Tap Add Cone</strong> · <strong>Select</strong> cone to resize/rotate · <strong>Drag</strong> to move
         </div>
       </div>
 
@@ -246,6 +285,22 @@
         <div class="tray-divider"></div>
 
         <div class="tray-section">
+          <div class="tray-label">Cone</div>
+          <button class="action-btn cone-btn" onclick="addCone()">🎩 Add Cone</button>
+        </div>
+
+        <div class="tray-divider"></div>
+
+        <div class="tray-section">
+          <div class="tray-label">PFP Scale</div>
+          <div class="slider-container">
+            <input type="range" id="scaleSlider" min="50" max="200" value="100" oninput="updatePfpScale(this.value)">
+          </div>
+        </div>
+
+        <div class="tray-divider"></div>
+
+        <div class="tray-section">
           <div class="tray-label">Actions</div>
           <div class="action-buttons">
             <button class="action-btn delete-btn" onclick="deleteSelected()">🗑 Delete</button>
@@ -261,6 +316,7 @@
     const ctx = canvas.getContext('2d');
     
     let backgroundImage = null;
+    let pfpScale = 1.0;
     let elements = [];
     let selectedElement = null;
     let isDragging = false;
@@ -305,38 +361,30 @@
       };
       img.src = file;
     }
-
-    function getDisplaySize(el) {
-      if (el.type === 'image' && el.image && el.image.complete) {
-        const w = el.image.naturalWidth * (el.size / 100);
-        const h = el.image.naturalHeight * (el.size / 100);
-        return { w, h };
-      }
-      return { w: el.size, h: el.size };
-    }
-
+    
+    // Draw everything
     function draw() {
-      // Dark background
+      // Clear
       ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Draw circular frame ON TOP first (so we can clip to it)
+      
+      // Draw frame and PFP inside circular clip
       const frameImg = frameImages[currentFrame];
       if (frameImg) {
         const frameSize = 420;
         const frameX = (canvas.width - frameSize) / 2;
         const frameY = (canvas.height - frameSize) / 2;
         
-        // Create circular clip for frame
+        // Clip to circle
         ctx.save();
         ctx.beginPath();
-        ctx.arc(frameX + frameSize/2, frameY + frameSize/2, frameSize/2, 0, Math.PI * 2);
+        ctx.arc(frameX + frameSize/2, frameY + frameSize/2, frameSize/2 - 2, 0, Math.PI * 2);
         ctx.clip();
         
-        // Background image (PFP upload) - scaled to fill frame area
+        // Draw PFP scaled
         if (backgroundImage) {
-          const scale = Math.max(frameSize / backgroundImage.naturalWidth, 
-                                  frameSize / backgroundImage.naturalHeight);
+          const baseScale = 1.0;
+          const scale = baseScale * pfpScale;
           const w = backgroundImage.naturalWidth * scale;
           const h = backgroundImage.naturalHeight * scale;
           const x = frameX + (frameSize - w) / 2;
@@ -352,8 +400,8 @@
         // Draw frame overlay
         ctx.drawImage(frameImg, frameX, frameY, frameSize, frameSize);
       }
-
-      // Draw cone element
+      
+      // Draw cone elements
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
       });
@@ -370,22 +418,48 @@
         ctx.drawImage(el.image, -nativeW/2, -nativeH/2, nativeW, nativeH);
       }
       
-      // Selection indicator (simple)
+      // Selection indicators
       if (selected) {
-        ctx.restore();
-        ctx.save();
-        ctx.translate(el.x, el.y);
+        // Dashed selection box
         ctx.strokeStyle = '#FF9D00';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 2;
         ctx.setLineDash([6, 3]);
-        ctx.strokeRect(-nativeW/2 - 5, -nativeH/2 - 5, nativeW + 10, nativeH + 10);
+        ctx.strokeRect(-nativeW/2 - 4, -nativeH/2 - 4, nativeW + 8, nativeH + 8);
         ctx.setLineDash([]);
+        
+        // Resize handle (bottom-right)
+        ctx.fillStyle = '#FF9D00';
+        ctx.fillRect(nativeW/2 - 8, nativeH/2 - 8, 16, 16);
+        
+        // Rotate handle (top-center with arc)
+        const rotAngle = -Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(0, -nativeH/2);
+        ctx.lineTo(-8, -nativeH/2 - 15);
+        ctx.lineTo(8, -nativeH/2 - 15);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Rotation arc indicator
+        ctx.beginPath();
+        ctx.arc(0, -nativeH/2, 12, rotAngle - 0.5, rotAngle + 0.5);
+        ctx.strokeStyle = '#FF9D00';
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
       
       ctx.restore();
     }
     
-    // Get element at position
+    function getDisplaySize(el) {
+      if (el.type === 'image' && el.image && el.image.complete) {
+        const w = el.image.naturalWidth * (el.size / 100);
+        const h = el.image.naturalHeight * (el.size / 100);
+        return { w, h };
+      }
+      return { w: el.size, h: el.size };
+    }
+    
     function getElementAt(x, y) {
       for (let i = elements.length - 1; i >= 0; i--) {
         const el = elements[i];
@@ -396,7 +470,6 @@
       return null;
     }
     
-    // Get canvas coordinates
     function getCanvasCoords(e) {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -409,15 +482,9 @@
       };
     }
     
-    // Pointer handlers
     function onPointerDown(e) {
       e.preventDefault();
       const { x, y } = getCanvasCoords(e);
-      
-      if (elements.length === 0) {
-        addCone();
-        return;
-      }
       
       const el = getElementAt(x, y);
       if (el) {
@@ -452,12 +519,13 @@
         return;
       }
       
+      // Position cone centered in frame area
       const el = {
         type: 'image',
         image: coneImage,
         x: 250,
         y: 250,
-        size: 80,
+        size: 100,  // 100% of natural size
         rotation: 0,
       };
       
@@ -477,6 +545,11 @@
       if (!selectedElement) return;
       elements = elements.filter(e => e !== selectedElement);
       selectedElement = null;
+      draw();
+    }
+    
+    function updatePfpScale(value) {
+      pfpScale = value / 100;
       draw();
     }
     
