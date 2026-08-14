@@ -440,8 +440,8 @@
         hasBorder: true,
         borderColor: '#FF9D00',
         borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 100 },
-        coneDefaultSize: 180,
+        coneDefaultPos: { x: 250, y: 120 },
+        coneDefaultSize: 45,
       },
       'qualifier': {
         name: 'Qualifier',
@@ -450,8 +450,8 @@
         hasBorder: true,
         borderColor: '#00E676',
         borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 100 },
-        coneDefaultSize: 180,
+        coneDefaultPos: { x: 250, y: 120 },
+        coneDefaultSize: 45,
       },
       'battle': {
         name: 'Battle',
@@ -460,16 +460,16 @@
         hasBorder: true,
         borderColor: '#8B2CFF',
         borderStyle: 'dashed',
-        coneDefaultPos: { x: 250, y: 100 },
-        coneDefaultSize: 180,
+        coneDefaultPos: { x: 250, y: 120 },
+        coneDefaultSize: 45,
       },
       'classic': {
         name: 'Classic',
         bgColor: '#101010',
         accentColor: '#FF9D00',
         hasBorder: false,
-        coneDefaultPos: { x: 250, y: 80 },
-        coneDefaultSize: 160,
+        coneDefaultPos: { x: 250, y: 100 },
+        coneDefaultSize: 40,
       }
     };
 
@@ -521,7 +521,8 @@
       if (el.type === 'image' && el.image && el.image.complete) {
         const w = el.image.naturalWidth;
         const h = el.image.naturalHeight;
-        ctx.drawImage(el.image, -w/2, -h/2, w, h);
+        const scale = el.size / 100;
+        ctx.drawImage(el.image, -w*scale/2, -h*scale/2, w*scale, h*scale);
       }
       
       if (selected) {
@@ -643,7 +644,7 @@
       for (let i = elements.length - 1; i >= 0; i--) {
         const el = elements[i];
         const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
-        if (dist < el.size * 1.5) {
+        if (dist < el.size * 3) {
           selectElement(el);
           isDragging = true;
           dragOffset = { x: x - el.x, y: y - el.y };
