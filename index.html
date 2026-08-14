@@ -440,8 +440,8 @@
         hasBorder: true,
         borderColor: '#FF9D00',
         borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 140 },
-        coneDefaultSize: 30,
+        coneDefaultPos: { x: 250, y: 130 },
+        coneDefaultSize: 18,
       },
       'qualifier': {
         name: 'Qualifier',
@@ -450,8 +450,8 @@
         hasBorder: true,
         borderColor: '#00E676',
         borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 140 },
-        coneDefaultSize: 30,
+        coneDefaultPos: { x: 250, y: 130 },
+        coneDefaultSize: 18,
       },
       'battle': {
         name: 'Battle',
@@ -460,16 +460,16 @@
         hasBorder: true,
         borderColor: '#8B2CFF',
         borderStyle: 'dashed',
-        coneDefaultPos: { x: 250, y: 140 },
-        coneDefaultSize: 30,
+        coneDefaultPos: { x: 250, y: 130 },
+        coneDefaultSize: 18,
       },
       'classic': {
         name: 'Classic',
         bgColor: '#101010',
         accentColor: '#FF9D00',
         hasBorder: false,
-        coneDefaultPos: { x: 250, y: 120 },
-        coneDefaultSize: 28,
+        coneDefaultPos: { x: 250, y: 110 },
+        coneDefaultSize: 16,
       }
     };
 
@@ -645,8 +645,13 @@
       
       for (let i = elements.length - 1; i >= 0; i--) {
         const el = elements[i];
+        // Calculate actual hit area based on rendered size
+        const imgW = (el.type === 'image' && el.image) ? el.image.naturalWidth * (el.size / 100) : el.size;
+        const imgH = (el.type === 'image' && el.image) ? el.image.naturalHeight * (el.size / 100) : el.size;
+        const hitRadius = Math.max(imgW, imgH) / 2;
+        
         const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
-        if (dist < el.size * 3) {
+        if (dist < hitRadius) {
           selectElement(el);
           isDragging = true;
           dragOffset = { x: x - el.x, y: y - el.y };
