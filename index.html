@@ -307,11 +307,12 @@
     let selectedElement = null;
     
     // State for interactions
-    let interactionMode = null; // 'drag', 'pinch', 'rotate'
+    let interactionMode = null;
     let initialTouchDistance = null;
     let initialConeSize = null;
     let initialRotation = null;
-    let initialPinchCenter = null;
+    let initialAngle = null;
+    let lastPinchCenter = null;
     
     // Load cone image
     const coneImage = new Image();
@@ -490,7 +491,6 @@
       if (e.touches.length !== 2) return;
       
       if (!selectedElement) {
-        // Check if we're touching near a cone to start pinch/rotate
         const mid = getTouchMidpoint(e.touches);
         const el = getElementAt(mid.x, mid.y);
         if (el) {
@@ -499,36 +499,35 @@
         if (!selectedElement) return;
       }
       
-      // Store initial state
+      // Reset baseline on first two-finger contact
       if (!initialTouchDistance) {
         initialTouchDistance = getTouchDistance(e.touches);
         initialConeSize = selectedElement.size;
         initialRotation = selectedElement.rotation;
-        initialPinchCenter = getTouchMidpoint(e.touches);
+        initialAngle = getTouchAngle(e.touches);
+        lastPinchCenter = getTouchMidpoint(e.touches);
       }
       
       const currentDist = getTouchDistance(e.touches);
       const currentAngle = getTouchAngle(e.touches);
       const currentMid = getTouchMidpoint(e.touches);
       
-      // Scale calculation (pinch zoom standard)
+      // Scale: ratio of current distance to initial distance
       const scaleRatio = currentDist / initialTouchDistance;
-      selectedElement.size = Math.max(20, Math.min(300, initialConeSize * scaleRatio));
+      selectedElement.size = Math.max(10, Math.min(200, initialConeSize * scaleRatio));
       
-      // Rotation calculation (two-finger rotate standard)
-      let rotationDelta = (currentAngle - initialAngle) * 180 / Math.PI;
-      selectedElement.rotation = initialRotation + rotationDelta;
+      // Rotation: difference in angle between current and initial
+      let angleDiff = (currentAngle - initialAngle) * 180 / Math.PI;
+      selectedElement.rotation = initialRotation + angleDiff;
       
-      // Dragging when two fingers are used (moves both rotation and position)
-      if (initialPinchCenter) {
-        const dx = currentMid.x - initialPinchCenter.x;
-        const dy = currentMid.y - initialPinchCenter.y;
+      // Move with pinch center drift
+      if (lastPinchCenter) {
+        const dx = currentMid.x - lastPinchCenter.x;
+        const dy = currentMid.y - lastPinchCenter.y;
         selectedElement.x += dx;
         selectedElement.y += dy;
+        lastPinchCenter = currentMid;
       }
-      
-      initialAngle = currentAngle;
-      initialPinchCenter = currentMid;
       
       draw();
     }
@@ -538,9 +537,10 @@
       e.preventDefault();
       isDragging = false;
       initialTouchDistance = null;
+      initialConeSize = null;
       initialRotation = null;
-      initialPinchCenter = null;
       initialAngle = null;
+      lastPinchCenter = null;
       
       // If last touch, continue drag if selected
       if (e.touches.length === 1) {
@@ -630,13 +630,13 @@
         return;
       }
       
-      // Position cone centered
+      // Position cone centered at smaller default size
       const el = {
         type: 'image',
         image: coneImage,
         x: 250,
         y: 250,
-        size: 100,
+        size: 40,  // 40% of natural size = ~480px wide on 500px canvas
         rotation: 0,
       };
       
