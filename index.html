@@ -797,17 +797,30 @@
     }
     
     function downloadImage() {
+      console.log('downloadImage called');
+
       // Deselect any selected element first
       const wasSelected = selectedElement;
       selectedElement = null;
       draw();
 
       try {
+        // Check if canvas is available
+        if (!canvas || !canvas.getContext) {
+          console.error('Canvas not available');
+          return;
+        }
+
         // Create a temp canvas with glow effect
         const tempCanvas = document.createElement('canvas');
         tempCanvas.width = canvas.width;
         tempCanvas.height = canvas.height;
         const tempCtx = tempCanvas.getContext('2d');
+
+        if (!tempCtx) {
+          console.error('Temp context not available');
+          return;
+        }
 
         // Draw glow border (30px spread)
         tempCtx.shadowColor = 'rgba(255, 157, 0, 0.5)';
@@ -819,29 +832,25 @@
         // Draw the actual canvas content
         tempCtx.drawImage(canvas, 0, 0);
 
+        // Get data URL
+        const dataUrl = tempCanvas.toDataURL('image/png');
+        console.log('Data URL length:', dataUrl.length);
+
         // Download
         const link = document.createElement('a');
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
         link.download = `cade-conify-${timestamp}.png`;
-        link.href = tempCanvas.toDataURL('image/png');
-        
+        link.href = dataUrl;
+
         // Trigger download
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
 
-        console.log('Downloaded with glow effect');
+        console.log('Download triggered');
       } catch (e) {
         console.error('Download failed:', e);
-        // Fallback: download without glow
-        const link = document.createElement('a');
-        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-        link.download = `cade-conify-${timestamp}.png`;
-        link.href = canvas.toDataURL('image/png');
-        
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        alert('Download failed: ' + e.message);
       }
 
       // Restore selection
