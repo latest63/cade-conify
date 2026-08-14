@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>CADE Conify — Party Cone PFP</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,12 +14,8 @@
       --orange: #FF9D00;
       --orange-bright: #FFB000;
       --purple: #8B2CFF;
-      --purple-dark: #6A00FF;
       --white-warm: #F5F0E8;
-      --green: #00E676;
-      --red: #FF3D71;
       --black-outline: #0a0a0a;
-      --shadow-offset: 4px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,39 +25,29 @@
       color: var(--white-warm);
       font-family: 'Space Grotesk', sans-serif;
       min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-      background-size: 8px 8px;
-      pointer-events: none;
-      z-index: 0;
+      touch-action: none;
     }
 
     .app-shell {
-      position: relative;
-      z-index: 1;
-      max-width: 1200px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 20px;
+      padding: 15px;
     }
 
-    header { text-align: center; padding: 30px 0 20px; }
+    header {
+      text-align: center;
+      padding: 15px 0;
+    }
 
     .logo {
       font-family: 'Bangers', cursive;
-      font-size: 3.5rem;
+      font-size: clamp(2rem, 8vw, 3.5rem);
       letter-spacing: 4px;
       color: var(--orange);
       -webkit-text-stroke: 2px #fff;
       paint-order: stroke fill;
-      transform: rotate(-2deg);
       display: block;
-      line-height: 1.1;
+      line-height: 1;
     }
 
     .logo span {
@@ -73,35 +59,40 @@
     }
 
     .tagline {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #666;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      margin-top: 8px;
+      letter-spacing: 2px;
+      margin-top: 5px;
     }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
-
+    /* Mobile-first layout */
     .editor-layout {
       display: flex;
-      gap: 24px;
-      align-items: flex-start;
-      margin-top: 30px;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: 20px;
     }
 
-    @media (max-width: 900px) {
-      .editor-layout { flex-direction: column; align-items: center; }
+    @media (min-width: 768px) {
+      .editor-layout {
+        flex-direction: row;
+        align-items: flex-start;
+      }
     }
 
-    .canvas-stage { flex: 1; max-width: 520px; }
+    .canvas-stage {
+      flex: 1;
+      min-width: 0;
+    }
 
     .canvas-wrapper {
       position: relative;
       background: var(--bg-card);
       border: 3px solid #2a2a2a;
       border-radius: 4px;
-      box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--black-outline);
       overflow: hidden;
+      touch-action: none;
     }
 
     canvas {
@@ -111,74 +102,42 @@
       cursor: crosshair;
     }
 
-    .conify-burst {
-      position: fixed;
-      pointer-events: none;
-      z-index: 100;
-      font-family: 'Bangers', cursive;
-      font-size: 2rem;
-      color: var(--orange);
-      text-shadow: 2px 2px 0 var(--black-outline);
-      animation: burst-pop 0.6s ease-out forwards;
-    }
-
-    @keyframes burst-pop {
-      0% { transform: scale(0) rotate(-20deg); opacity: 1; }
-      50% { transform: scale(1.3) rotate(5deg); opacity: 1; }
-      100% { transform: scale(1) rotate(0deg) translateY(-40px); opacity: 0; }
-    }
-
     .sidebar {
-      width: 280px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      flex-shrink: 0;
+      width: 100%;
+      max-width: 350px;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar {
+        width: 300px;
+        flex-shrink: 0;
+      }
     }
 
     .card {
       background: var(--bg-card);
       border: 2px solid #2a2a2a;
       border-radius: 4px;
-      padding: 16px;
-      box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--black-outline);
-      transition: transform 0.15s;
+      padding: 12px;
+      margin-bottom: 12px;
     }
-
-    .card:hover { transform: translate(-1px, -1px); }
 
     .card-title {
       font-family: 'Bangers', cursive;
-      font-size: 1rem;
+      font-size: 0.9rem;
       letter-spacing: 2px;
       color: var(--orange);
       text-transform: uppercase;
-      margin-bottom: 12px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .card-title::before {
-      content: '';
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: var(--purple);
-      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      margin-bottom: 10px;
     }
 
     .upload-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
       width: 100%;
-      padding: 14px 20px;
+      padding: 12px;
       background: var(--orange);
       color: #000;
       font-family: 'Bangers', cursive;
-      font-size: 1.1rem;
+      font-size: 1rem;
       letter-spacing: 2px;
       text-transform: uppercase;
       border: none;
@@ -188,20 +147,11 @@
       transition: all 0.1s;
     }
 
-    .upload-btn:hover {
-      background: var(--orange-bright);
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 var(--black-outline);
-    }
-
-    .upload-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--black-outline);
-    }
+    .upload-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black-outline); }
+    .upload-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black-outline); }
 
     input[type="file"] { display: none; }
 
-    /* Frame selector */
     .frame-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -212,17 +162,16 @@
       background: #1e1e1e;
       border: 2px solid #333;
       border-radius: 4px;
-      padding: 12px 8px;
+      padding: 10px 6px;
       color: #fff;
-      font-size: 0.7rem;
-      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.65rem;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.1s;
-      box-shadow: 2px 2px 0 var(--black-outline);
       text-align: center;
       text-transform: uppercase;
       letter-spacing: 1px;
+      box-shadow: 2px 2px 0 var(--black-outline);
+      transition: all 0.1s;
     }
 
     .frame-btn:hover {
@@ -230,7 +179,6 @@
       color: #000;
       border-color: var(--orange);
       transform: translate(-1px, -1px);
-      box-shadow: 3px 3px 0 var(--black-outline);
     }
 
     .frame-btn.active {
@@ -239,46 +187,17 @@
       color: #fff;
     }
 
-    .frame-btn .frame-preview {
-      width: 100%;
-      height: 40px;
-      background: #0a0a0a;
-      border-radius: 2px;
-      margin-bottom: 6px;
+    .action-row {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
+      flex-direction: column;
+      gap: 8px;
     }
-
-    /* Sliders */
-    .slider-group { margin-bottom: 14px; }
-
-    .slider-group label {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.7rem;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 6px;
-    }
-
-    .slider-group label span { color: var(--orange); font-weight: 700; }
-
-    input[type="range"] {
-      width: 100%;
-      accent-color: var(--orange);
-      cursor: pointer;
-    }
-
-    .action-row { display: flex; flex-direction: column; gap: 8px; }
 
     .action-btn {
       width: 100%;
-      padding: 12px 16px;
+      padding: 10px;
       font-family: 'Bangers', cursive;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       letter-spacing: 2px;
       text-transform: uppercase;
       border: none;
@@ -286,130 +205,90 @@
       cursor: pointer;
       box-shadow: 3px 3px 0 var(--black-outline);
       transition: all 0.1s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
     }
 
     .action-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black-outline); }
     .action-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black-outline); }
 
     .action-btn.orange { background: var(--orange); color: #000; }
-    .action-btn.purple { background: var(--purple); color: #fff; }
     .action-btn.red { background: var(--red); color: #fff; }
 
     .hint-bar {
       background: #1a1a1a;
       border-left: 3px solid var(--orange);
-      padding: 10px 14px;
-      font-size: 0.7rem;
-      color: #666;
+      padding: 8px 12px;
+      font-size: 0.65rem;
+      color: #888;
       text-transform: uppercase;
       letter-spacing: 1px;
-      line-height: 1.6;
+      margin-top: 10px;
     }
 
     .hint-bar strong { color: var(--orange); }
 
-    .lightning {
-      position: fixed;
-      opacity: 0.04;
-      pointer-events: none;
-      font-size: 20rem;
-      color: var(--orange);
-      font-family: 'Bangers', cursive;
-      z-index: 0;
+    .instructions {
+      background: #1a1a1a;
+      border-left: 3px solid var(--purple);
+      padding: 10px;
+      font-size: 0.7rem;
+      color: #888;
+      margin-bottom: 12px;
+      line-height: 1.5;
     }
 
-    .lightning-1 { top: -50px; left: -50px; }
-    .lightning-2 { bottom: -80px; right: -30px; color: var(--purple); }
-
-    .ripped-edge {
-      height: 8px;
-      background: var(--bg-deep);
-      background-image: linear-gradient(135deg, transparent 33.33%, var(--bg-card) 33.33%, var(--bg-card) 66.66%, transparent 66.66%),
-                        linear-gradient(225deg, transparent 33.33%, var(--bg-card) 33.33%, var(--bg-card) 66.66%, transparent 66.66%);
-      background-size: 16px 8px;
-      background-position: 0 0, 8px 0;
-    }
+    .instructions strong { color: var(--orange); }
   </style>
 </head>
 <body>
-  <div class="lightning lightning-1">⚡</div>
-  <div class="lightning lightning-2">⚡</div>
-
   <div class="app-shell">
     <header>
       <h1 class="logo">CADE <span>CONIFY</span></h1>
       <p class="tagline">☠️ Meme Madness Edition ☠️</p>
     </header>
 
-    <div class="ripped-edge"></div>
-
     <div class="editor-layout">
       <div class="canvas-stage">
         <div class="canvas-wrapper">
           <canvas id="canvas" width="500" height="500"></canvas>
         </div>
-        <div class="hint-bar" style="margin-top: 10px;">
-          <strong>How to:</strong> Upload PFP → Pick frame → Click to place cone → Drag to move → Adjust size/rotate → Download
+        <div class="hint-bar">
+          <strong>Touch:</strong> Tap once to place cone · Tap again to select · Drag to move · Pull corners to resize · Pull top handle to rotate
         </div>
       </div>
 
       <div class="sidebar">
-        <!-- Upload -->
         <div class="card">
           <div class="card-title">Upload PFP</div>
           <input type="file" id="upload" accept="image/*">
-          <button class="upload-btn" onclick="document.getElementById('upload').click()">
-            📁 Choose Image
-          </button>
+          <button class="upload-btn" onclick="document.getElementById('upload').click()">📁 Choose Image</button>
         </div>
 
-        <!-- Frames -->
         <div class="card">
           <div class="card-title">Select Frame</div>
           <div class="frame-grid">
-            <button class="frame-btn active" data-frame="meme-madness" onclick="selectFrame(this)">
-              <div class="frame-preview">🎯</div>
-              Meme Madness
-            </button>
-            <button class="frame-btn" data-frame="qualifier" onclick="selectFrame(this)">
-              <div class="frame-preview">🏆</div>
-              Qualifier
-            </button>
-            <button class="frame-btn" data-frame="battle" onclick="selectFrame(this)">
-              <div class="frame-preview">⚔️</div>
-              Battle
-            </button>
-            <button class="frame-btn" data-frame="classic" onclick="selectFrame(this)">
-              <div class="frame-preview">🎉</div>
-              Classic
-            </button>
+            <button class="frame-btn active" data-frame="meme-madness" onclick="selectFrame(this)">🎯 Meme Madness</button>
+            <button class="frame-btn" data-frame="qualifier" onclick="selectFrame(this)">🏆 Qualifier</button>
+            <button class="frame-btn" data-frame="battle" onclick="selectFrame(this)">⚔️ Battle</button>
+            <button class="frame-btn" data-frame="classic" onclick="selectFrame(this)">🎉 Classic</button>
           </div>
         </div>
 
-        <!-- Transform -->
-        <div class="card">
-          <div class="card-title">Transform</div>
-          <div class="slider-group">
-            <label>Size <span id="size-val">100%</span></label>
-            <input type="range" id="size" min="20" max="250" value="100">
-          </div>
-          <div class="slider-group">
-            <label>Rotate <span id="rotate-val">0°</span></label>
-            <input type="range" id="rotate" min="-180" max="180" value="0">
-          </div>
-        </div>
-
-        <!-- Actions -->
         <div class="card">
           <div class="card-title">Actions</div>
           <div class="action-row">
-            <button class="action-btn red" onclick="deleteSelected()">🗑 Delete Cone</button>
+            <button class="action-btn red" onclick="deleteSelected()">🗑 Delete</button>
             <button class="action-btn orange" onclick="downloadImage()">⬇ Download PNG</button>
           </div>
+        </div>
+
+        <div class="instructions">
+          <strong>How to use:</strong><br>
+          1. Upload your PFP<br>
+          2. Tap canvas → cone appears<br>
+          3. Tap cone again → selected<br>
+          4. Drag to move<br>
+          5. Pull corner handles ↕↔ to resize<br>
+          6. Pull top handle ↑↓ to rotate
         </div>
       </div>
     </div>
@@ -423,7 +302,10 @@
     let elements = [];
     let selectedElement = null;
     let isDragging = false;
+    let isResizing = false;
+    let isRotating = false;
     let dragOffset = { x: 0, y: 0 };
+    let resizeHandle = null;
     let currentFrame = 'meme-madness';
     
     // Load the actual cone image
@@ -434,159 +316,246 @@
     
     coneImage.onload = () => {
       coneImageLoaded = true;
-      draw(); // Redraw if image was loaded after initial draw
+      draw();
     };
     
     // Frame configurations
     const frames = {
-      'meme-madness': {
-        name: 'Meme Madness',
-        bgColor: '#1a0a00',
-        accentColor: '#FF9D00',
-        hasBorder: true,
-        borderColor: '#FF9D00',
-        borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 130 },
-        coneDefaultSize: 18,
-      },
-      'qualifier': {
-        name: 'Qualifier',
-        bgColor: '#0a1a0a',
-        accentColor: '#00E676',
-        hasBorder: true,
-        borderColor: '#00E676',
-        borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 130 },
-        coneDefaultSize: 18,
-      },
-      'battle': {
-        name: 'Battle',
-        bgColor: '#1a0a1a',
-        accentColor: '#8B2CFF',
-        hasBorder: true,
-        borderColor: '#8B2CFF',
-        borderStyle: 'dashed',
-        coneDefaultPos: { x: 250, y: 130 },
-        coneDefaultSize: 18,
-      },
-      'classic': {
-        name: 'Classic',
-        bgColor: '#101010',
-        accentColor: '#FF9D00',
-        hasBorder: false,
-        coneDefaultPos: { x: 250, y: 110 },
-        coneDefaultSize: 16,
-      }
+      'meme-madness': { bgColor: '#1a0a00', borderColor: '#FF9D00', hasBorder: true, coneDefaultPos: { x: 250, y: 140 }, coneDefaultSize: 18 },
+      'qualifier': { bgColor: '#0a1a0a', borderColor: '#00E676', hasBorder: true, coneDefaultPos: { x: 250, y: 140 }, coneDefaultSize: 18 },
+      'battle': { bgColor: '#1a0a1a', borderColor: '#8B2CFF', hasBorder: true, coneDefaultPos: { x: 250, y: 140 }, coneDefaultSize: 18, borderStyle: 'dashed' },
+      'classic': { bgColor: '#101010', hasBorder: false, coneDefaultPos: { x: 250, y: 130 }, coneDefaultSize: 16 }
     };
+
+    function getDisplaySize(el) {
+      if (el.type === 'image' && el.image && el.image.complete) {
+        const w = el.image.naturalWidth * (el.size / 100);
+        const h = el.image.naturalHeight * (el.size / 100);
+        return { w, h };
+      }
+      return { w: el.size, h: el.size };
+    }
 
     function draw() {
       const frame = frames[currentFrame];
       
-      // Clear with frame background
       ctx.fillStyle = frame.bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw border if enabled
       if (frame.hasBorder) {
         ctx.strokeStyle = frame.borderColor;
         ctx.lineWidth = frame.borderStyle === 'dashed' ? 4 : 6;
-        if (frame.borderStyle === 'dashed') {
-          ctx.setLineDash([12, 6]);
-        }
+        if (frame.borderStyle === 'dashed') ctx.setLineDash([12, 6]);
         ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
         ctx.setLineDash([]);
       }
       
-      // Draw halftone pattern
-      ctx.fillStyle = 'rgba(255,255,255,0.02)';
-      for (let x = 4; x < canvas.width; x += 8) {
-        for (let y = 4; y < canvas.height; y += 8) {
-          ctx.beginPath();
-          ctx.arc(x, y, 1, 0, Math.PI * 2);
-          ctx.fill();
-        }
-      }
-      
-      // Draw background if exists
       if (backgroundImage) {
         ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
       }
       
-      // Draw elements (cone)
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
       });
     }
     
     function drawElement(el, selected) {
+      const { w: nativeW, h: nativeH } = getDisplaySize(el);
+      
       ctx.save();
       ctx.translate(el.x, el.y);
       ctx.rotate(el.rotation * Math.PI / 180);
-      ctx.scale(el.size / 100, el.size / 100);
       
       if (el.type === 'image' && el.image && el.image.complete) {
-        const w = el.image.naturalWidth;
-        const h = el.image.naturalHeight;
-        const scale = el.size / 100;
-        ctx.drawImage(el.image, -w*scale/2, -h*scale/2, w*scale, h*scale);
+        ctx.drawImage(el.image, -nativeW/2, -nativeH/2, nativeW, nativeH);
       }
       
       if (selected) {
-        ctx.restore();
-        ctx.save();
-        ctx.translate(el.x, el.y);
+        // Draw selection box
         ctx.strokeStyle = '#FF9D00';
-        ctx.lineWidth = 3;
-        ctx.setLineDash([8, 4]);
-        // Draw selection box around the element based on its rendered size
-        const displayW = (el.type === 'image' && el.image) ? el.image.naturalWidth * (el.size / 100) : el.size;
-        const displayH = (el.type === 'image' && el.image) ? el.image.naturalHeight * (el.size / 100) : el.size;
-        ctx.strokeRect(-displayW/2 - 5, -displayH/2 - 5, displayW + 10, displayH + 10);
+        ctx.lineWidth = 2;
+        ctx.setLineDash([6, 3]);
+        ctx.strokeRect(-nativeW/2 - 3, -nativeH/2 - 3, nativeW + 6, nativeH + 6);
         ctx.setLineDash([]);
+        
+        // Draw resize handles (corners)
+        const hs = 12; // handle size
+        ctx.fillStyle = '#FF9D00';
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        
+        // Bottom-right handle
+        ctx.fillRect(nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
+        ctx.strokeRect(nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
+        
+        // Bottom-left handle
+        ctx.fillRect(-nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
+        ctx.strokeRect(-nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
+        
+        // Top-right handle
+        ctx.fillRect(nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
+        ctx.strokeRect(nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
+        
+        // Top-left handle
+        ctx.fillRect(-nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
+        ctx.strokeRect(-nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
+        
+        // Draw rotate handle (top center with arc)
+        const rotY = -nativeH/2 - 30;
+        ctx.beginPath();
+        ctx.arc(0, rotY, 10, 0, Math.PI * 2);
+        ctx.fillStyle = '#FF9D00';
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Draw line from element to rotate handle
+        ctx.beginPath();
+        ctx.moveTo(0, -nativeH/2);
+        ctx.lineTo(0, rotY + 10);
+        ctx.strokeStyle = '#FF9D00';
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
       
       ctx.restore();
     }
     
-    document.getElementById('upload').addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          backgroundImage = img;
-          draw();
-          showBurst('UPLOADED!', canvas.width/2, 40);
-        };
-        img.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    });
+    // Get element at position
+    function getElementAt(x, y) {
+      for (let i = elements.length - 1; i >= 0; i--) {
+        const el = elements[i];
+        const { w: nw, h: nh } = getDisplaySize(el);
+        const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
+        if (dist < Math.max(nw, nh) / 2) return { el, dist };
+      }
+      return null;
+    }
     
-    function selectFrame(btn) {
-      document.querySelectorAll('.frame-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFrame = btn.dataset.frame;
+    // Get resize handle at position
+    function getResizeHandle(el, x, y) {
+      if (!el || el.type !== 'image') return null;
+      const { w: nw, h: nh } = getDisplaySize(el);
+      const hs = 15;
+      const handles = [
+        { name: 'br', x: el.x + nw/2, y: el.y + nh/2 },
+        { name: 'bl', x: el.x - nw/2, y: el.y + nh/2 },
+        { name: 'tr', x: el.x + nw/2, y: el.y - nh/2 },
+        { name: 'tl', x: el.x - nw/2, y: el.y - nh/2 },
+        { name: 'rot', x: el.x, y: el.y - nh/2 - 30 }
+      ];
       
-      // Reset cone position for new frame
-      if (elements.length > 0) {
-        const frame = frames[currentFrame];
-        elements[0].x = frame.coneDefaultPos.x;
-        elements[0].y = frame.coneDefaultPos.y;
-        elements[0].size = frame.coneDefaultSize;
-        updateTransform();
+      for (const h of handles) {
+        if (Math.abs(x - h.x) < hs && Math.abs(y - h.y) < hs) return h.name;
+      }
+      return null;
+    }
+    
+    // Get canvas coordinates from event
+    function getCanvasCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * scaleX,
+        y: (clientY - rect.top) * scaleY
+      };
+    }
+    
+    // Pointer down handler
+    function onPointerDown(e) {
+      e.preventDefault();
+      const { x, y } = getCanvasCoords(e);
+      
+      if (elements.length === 0) {
+        addCone();
+        return;
+      }
+      
+      const hit = getElementAt(x, y);
+      if (hit) {
+        const { el } = hit;
+        const handle = getResizeHandle(el, x, y);
+        
+        if (handle === 'rot') {
+          isRotating = true;
+          selectedElement = el;
+        } else if (handle && handle !== 'rot') {
+          isResizing = true;
+          resizeHandle = handle;
+          selectedElement = el;
+        } else if (selectedElement === el) {
+          isDragging = true;
+        } else {
+          selectedElement = el;
+          isDragging = true;
+        }
+        
+        dragOffset = { x: x - el.x, y: y - el.y };
+        draw();
+      } else {
+        selectedElement = null;
+        draw();
+      }
+    }
+    
+    // Pointer move handler
+    function onPointerMove(e) {
+      e.preventDefault();
+      if (!selectedElement) return;
+      
+      const { x, y } = getCanvasCoords(e);
+      
+      if (isDragging) {
+        selectedElement.x = x - dragOffset.x;
+        selectedElement.y = y - dragOffset.y;
+      } else if (isResizing && resizeHandle) {
+        const dx = x - selectedElement.x;
+        const dy = y - selectedElement.y;
+        const angle = selectedElement.rotation * Math.PI / 180;
+        const localX = dx * Math.cos(-angle) - dy * Math.sin(-angle);
+        const localY = dx * Math.sin(-angle) + dy * Math.cos(-angle);
+        
+        const baseSize = selectedElement.baseSize || selectedElement.size;
+        let newSize = baseSize;
+        
+        if (resizeHandle.includes('r')) newSize += localX * 0.5;
+        if (resizeHandle.includes('l')) newSize -= localX * 0.5;
+        if (resizeHandle.includes('b')) newSize += localY * 0.5;
+        if (resizeHandle.includes('t')) newSize -= localY * 0.5;
+        
+        newSize = Math.max(10, Math.min(300, newSize));
+        selectedElement.size = newSize;
+        document.getElementById('sizeVal').textContent = Math.round(newSize) + '%';
+      } else if (isRotating) {
+        const dx = x - selectedElement.x;
+        const dy = y - selectedElement.y;
+        let angle = Math.atan2(dx, -dy) * 180 / Math.PI + 90;
+        angle = Math.round(angle / 5) * 5; // Snap to 5 degrees
+        if (angle < 0) angle += 360;
+        if (angle >= 360) angle -= 360;
+        selectedElement.rotation = angle;
+        document.getElementById('rotateVal').textContent = angle + '°';
       }
       
       draw();
-      showBurst('FRAME!', canvas.width/2, canvas.height - 50);
+    }
+    
+    // Pointer up handler
+    function onPointerUp(e) {
+      e.preventDefault();
+      isDragging = false;
+      isResizing = false;
+      isRotating = false;
+      resizeHandle = null;
     }
     
     function addCone() {
-      // Wait for image to load if not ready yet
       if (!coneImageLoaded && !coneImage.complete) {
-        setTimeout(addCone, 50); // Try again in 50ms
+        setTimeout(addCone, 50);
         return;
       }
       
@@ -597,6 +566,7 @@
         x: frame.coneDefaultPos.x,
         y: frame.coneDefaultPos.y,
         size: frame.coneDefaultSize,
+        baseSize: frame.coneDefaultSize,
         rotation: 0,
       };
       
@@ -608,7 +578,6 @@
     
     function selectElement(el) {
       selectedElement = el;
-      updateTransform();
       draw();
     }
     
@@ -616,94 +585,15 @@
       if (!selectedElement) return;
       elements = elements.filter(e => e !== selectedElement);
       selectedElement = null;
-      updateTransform();
       draw();
     }
     
-    function updateTransform() {
-      if (!selectedElement) return;
-      document.getElementById('size').value = selectedElement.size;
-      document.getElementById('size-val').textContent = selectedElement.size + '%';
-      document.getElementById('rotate').value = selectedElement.rotation;
-      document.getElementById('rotate-val').textContent = selectedElement.rotation + '°';
-    }
-    
-    document.getElementById('size').addEventListener('input', (e) => {
-      if (!selectedElement) return;
-      selectedElement.size = parseInt(e.target.value);
-      document.getElementById('size-val').textContent = selectedElement.size + '%';
+    function selectFrame(btn) {
+      document.querySelectorAll('.frame-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFrame = btn.dataset.frame;
       draw();
-    });
-    
-    document.getElementById('rotate').addEventListener('input', (e) => {
-      if (!selectedElement) return;
-      selectedElement.rotation = parseInt(e.target.value);
-      document.getElementById('rotate-val').textContent = selectedElement.rotation + '°';
-      draw();
-    });
-    
-    canvas.addEventListener('mousedown', (e) => {
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      const x = (e.clientX - rect.left) * scaleX;
-      const y = (e.clientY - rect.top) * scaleY;
-      
-      if (elements.length === 0) {
-        // Add cone on first click
-        addCone();
-        return;
-      }
-      
-      for (let i = elements.length - 1; i >= 0; i--) {
-        const el = elements[i];
-        // Calculate actual hit area based on rendered size
-        const imgW = (el.type === 'image' && el.image) ? el.image.naturalWidth * (el.size / 100) : el.size;
-        const imgH = (el.type === 'image' && el.image) ? el.image.naturalHeight * (el.size / 100) : el.size;
-        const hitRadius = Math.max(imgW, imgH) / 2;
-        
-        const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
-        if (dist < hitRadius) {
-          // If already selected, start dragging
-          if (selectedElement === el) {
-            isDragging = true;
-            dragOffset = { x: x - el.x, y: y - el.y };
-          } else {
-            // Select this element
-            selectElement(el);
-          }
-          return;
-        }
-      }
-      
-      // Clicked empty space - deselect
-      selectedElement = null;
-      updateTransform();
-      draw();
-    });
-    
-    canvas.addEventListener('mousemove', (e) => {
-      if (!isDragging || !selectedElement) return;
-      
-      const rect = canvas.getBoundingClientRect();
-      const scaleX = canvas.width / rect.width;
-      const scaleY = canvas.height / rect.height;
-      selectedElement.x = (e.clientX - rect.left) * scaleX - dragOffset.x;
-      selectedElement.y = (e.clientY - rect.top) * scaleY - dragOffset.y;
-      draw();
-    });
-    
-    canvas.addEventListener('mouseup', () => { isDragging = false; });
-    canvas.addEventListener('mouseleave', () => { isDragging = false; });
-    
-    function showBurst(text, x, y) {
-      const burst = document.createElement('div');
-      burst.className = 'conify-burst';
-      burst.textContent = text;
-      burst.style.left = x + 'px';
-      burst.style.top = y + 'px';
-      document.body.appendChild(burst);
-      setTimeout(() => burst.remove(), 700);
+      showBurst('FRAME!', canvas.width/2, canvas.height - 50);
     }
     
     function downloadImage() {
@@ -720,6 +610,44 @@
       draw();
       showBurst('SAVED!', canvas.width/2, canvas.height - 50);
     }
+    
+    function showBurst(text, x, y) {
+      const burst = document.createElement('div');
+      burst.className = 'conify-burst';
+      burst.textContent = text;
+      burst.style.left = x + 'px';
+      burst.style.top = y + 'px';
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 700);
+    }
+    
+    // Event listeners
+    canvas.addEventListener('mousedown', onPointerDown);
+    canvas.addEventListener('mousemove', onPointerMove);
+    canvas.addEventListener('mouseup', onPointerUp);
+    canvas.addEventListener('mouseleave', onPointerUp);
+    
+    canvas.addEventListener('touchstart', onPointerDown, { passive: false });
+    canvas.addEventListener('touchmove', onPointerMove, { passive: false });
+    canvas.addEventListener('touchend', onPointerUp, { passive: false });
+    
+    // Upload handler
+    document.getElementById('upload').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          backgroundImage = img;
+          draw();
+          showBurst('UPLOADED!', canvas.width/2, 40);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
     
     draw();
   </script>
