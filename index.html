@@ -78,6 +78,12 @@
       max-width: 500px;
       margin: 0 auto;
     }
+
+    .canvas-wrapper canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
     /* Tray Layout */
     .tray {
       display: grid;
@@ -254,7 +260,7 @@
     <div class="editor-layout">
       <div class="canvas-stage">
         <div class="canvas-wrapper">
-          <canvas id="canvas" width="500" height="500"></canvas>
+          <canvas id="canvas" width="1000" height="1000"></canvas>
         </div>
         <div class="hint-bar">
           <strong>Tap Add Cone</strong> · <strong>Select</strong> cone to pinch/drag · <strong>Two-finger twist</strong> to rotate
