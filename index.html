@@ -620,8 +620,17 @@
       draw();
     }
     
-    // Touch event listeners (mobile - industry standard touch gestures)
+    // Touch start handler - trigger upload on empty canvas
     canvas.addEventListener('touchstart', (e) => {
+      if (elements.length === 0 && !backgroundImage) {
+        const fileInput = document.getElementById('upload');
+        if (fileInput && e.touches.length === 1) {
+          e.preventDefault();
+          fileInput.click();
+          return;
+        }
+      }
+      
       if (e.touches.length === 1) {
         handleSingleTouch(e);
       } else if (e.touches.length === 2) {
@@ -630,23 +639,12 @@
       }
     }, { passive: false });
 
-    // Click handler for upload when canvas is empty
+    // Click handler for upload when canvas is empty (desktop fallback)
     canvas.addEventListener('click', (e) => {
-      const { x, y } = getCanvasCoords(e);
-
-      // If no elements and no background, show upload dialog
       if (elements.length === 0 && !backgroundImage) {
-        // Check if click is near center (industry standard)
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const dist = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-
-        // Allow tap anywhere on empty canvas
-        if (dist < 200 || elements.length === 0) {
-          const fileInput = document.getElementById('upload');
-          if (fileInput) {
-            fileInput.click();
-          }
+        const fileInput = document.getElementById('upload');
+        if (fileInput) {
+          fileInput.click();
         }
       }
     });
