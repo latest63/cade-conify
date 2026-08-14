@@ -311,9 +311,17 @@
     };
     
     // Frames - removed, using badges now
-    const badgeImage = new Image();
-    badgeImage.crossOrigin = 'anonymous';
-    badgeImage.src = 'badge1.png';
+    const badgeImages = ['badge1.png', 'badge2.png'];
+    let currentBadgeIndex = 0;
+    const badgeImageObjects = {};
+    
+    // Load all badge images
+    for (let i = 0; i < badgeImages.length; i++) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.src = badgeImages[i];
+      badgeImageObjects[badgeImages[i]] = img;
+    }
     
     // Get display size of an element
     function getDisplaySize(el) {
@@ -615,18 +623,23 @@
     }
 
     function addBadge() {
-      if (!badgeImage.complete) {
+      // Cycle through badge images
+      currentBadgeIndex = (currentBadgeIndex + 1) % badgeImages.length;
+      const badgeFile = badgeImages[currentBadgeIndex];
+      const img = badgeImageObjects[badgeFile];
+      
+      if (!img || !img.complete) {
         setTimeout(addBadge, 50);
         return;
       }
 
-      // Badge is wide (2184x720), place at bottom-center with appropriate size
+      // Place badge at bottom-center with appropriate size
       const el = {
         type: 'image',
-        image: badgeImage,
+        image: img,
         x: 500,  // center of 1000px canvas
         y: 850,  // near bottom
-        size: 35,  // 35% to fit nicely as a banner
+        size: 35,
         rotation: 0,
       };
 
