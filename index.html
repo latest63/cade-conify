@@ -282,11 +282,6 @@
         </div>
 
         <div class="tray-section">
-          <div class="tray-label">PFP Scale</div>
-          <input type="range" id="scaleSlider" min="50" max="200" value="100" oninput="updatePfpScale(this.value)" style="margin-top: 8px;">
-        </div>
-
-        <div class="tray-section">
           <div class="tray-label">Actions</div>
           <div class="action-buttons">
             <button class="action-btn delete-btn" onclick="deleteSelected()">🗑</button>
@@ -302,7 +297,6 @@
     const ctx = canvas.getContext('2d');
     
     let backgroundImage = null;
-    let pfpScale = 1.0;
     let elements = [];
     let selectedElement = null;
     
