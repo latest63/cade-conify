@@ -39,7 +39,7 @@
     }
 
     .logo-img {
-      max-width: 50px;
+      max-width: 80px;
       height: auto;
       display: block;
       margin: 0 auto;
@@ -245,6 +245,9 @@
       <p class="tagline">☠️ Meme Madness Edition ☠️</p>
     </header>
 
+    <!-- Hidden file input for canvas tap upload -->
+    <input type="file" id="upload" accept="image/*" style="display: none;">
+
     <div class="editor-layout">
       <div class="canvas-stage">
         <div class="canvas-wrapper">
@@ -397,15 +400,15 @@
       // Show upload placeholder when no elements and no background
       if (elements.length === 0 && !backgroundImage) {
         ctx.fillStyle = '#666';
-        ctx.font = '40px Bangers';
+        ctx.font = '60px Bangers';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText('📁', canvas.width / 2, canvas.height / 2 - 30);
-        ctx.font = '28px Space Grotesk';
+        ctx.fillText('📁', canvas.width / 2, canvas.height / 2 - 40);
+        ctx.font = '40px Space Grotesk';
         ctx.fillText('Upload PFP', canvas.width / 2, canvas.height / 2 + 30);
-        ctx.font = '20px Space Grotesk';
+        ctx.font = '28px Space Grotesk';
         ctx.fillStyle = '#444';
-        ctx.fillText('or tap to add cone', canvas.width / 2, canvas.height / 2 + 70);
+        ctx.fillText('Tap anywhere to upload', canvas.width / 2, canvas.height / 2 + 80);
       }
 
       // Draw elements (cone and badges)
