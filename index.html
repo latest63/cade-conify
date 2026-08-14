@@ -78,37 +78,35 @@
       max-width: 500px;
       margin: 0 auto;
     }
-
+    /* Tray Layout */
     .tray {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      padding: 10px;
       background: var(--bg-card);
       border: 2px solid #2a2a2a;
       border-radius: 4px;
     }
 
+    @media (min-width: 768px) {
+      .tray {
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
     .tray-section {
       display: flex;
       flex-direction: column;
-      gap: 6px;
-    }
-
-    .tray-divider {
-      width: 2px;
-      height: 40px;
-      background: #333;
-      align-self: center;
+      align-items: stretch;
+      gap: 4px;
     }
 
     .tray-label {
       font-family: 'Bangers', cursive;
-      font-size: 0.6rem;
+      font-size: 0.55rem;
       letter-spacing: 2px;
-      color: var(--orange);
+      color: #666;
       text-transform: uppercase;
       text-align: center;
     }
@@ -116,7 +114,7 @@
     .frame-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 6px;
+      gap: 4px;
     }
 
     .frame-btn {
@@ -270,39 +268,29 @@
           <button class="action-btn upload-btn" onclick="document.getElementById('upload').click()">📁 PFP</button>
         </div>
 
-        <div class="tray-divider"></div>
-
         <div class="tray-section">
           <div class="tray-label">Frame</div>
           <div class="frame-grid">
-            <button class="frame-btn active" data-frame="rect-1" onclick="selectFrame(this)">⬜ Rect 1</button>
-            <button class="frame-btn" data-frame="rect-2" onclick="selectFrame(this)">⬜ Rect 2</button>
+            <button class="frame-btn active" data-frame="rect-1" onclick="selectFrame(this)">Rect 1</button>
+            <button class="frame-btn" data-frame="rect-2" onclick="selectFrame(this)">Rect 2</button>
           </div>
         </div>
-
-        <div class="tray-divider"></div>
 
         <div class="tray-section">
           <div class="tray-label">Cone</div>
-          <button class="action-btn cone-btn" onclick="addCone()">🎩 Add Cone</button>
+          <button class="action-btn cone-btn" onclick="addCone()">🎩 Add</button>
         </div>
-
-        <div class="tray-divider"></div>
 
         <div class="tray-section">
           <div class="tray-label">PFP Scale</div>
-          <div class="slider-container">
-            <input type="range" id="scaleSlider" min="50" max="200" value="100" oninput="updatePfpScale(this.value)">
-          </div>
+          <input type="range" id="scaleSlider" min="50" max="200" value="100" oninput="updatePfpScale(this.value)" style="margin-top: 8px;">
         </div>
-
-        <div class="tray-divider"></div>
 
         <div class="tray-section">
           <div class="tray-label">Actions</div>
           <div class="action-buttons">
-            <button class="action-btn delete-btn" onclick="deleteSelected()">🗑 Delete</button>
-            <button class="action-btn download-btn" onclick="downloadImage()">⬇ Save</button>
+            <button class="action-btn delete-btn" onclick="deleteSelected()">🗑</button>
+            <button class="action-btn download-btn" onclick="downloadImage()">⬇</button>
           </div>
         </div>
       </div>
