@@ -782,12 +782,13 @@
       const wasSelected = selectedElement;
       selectedElement = null;
       draw();
-      
+
       const link = document.createElement('a');
-      link.download = `cade-conify-${currentFrame}.png`;
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+      link.download = `cade-conify-${timestamp}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
-      
+
       selectedElement = wasSelected;
       draw();
     }
