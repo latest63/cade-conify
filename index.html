@@ -262,10 +262,10 @@
         <div class="tray-section">
           <div class="tray-label">Frame</div>
           <div class="frame-grid">
-            <button class="frame-btn active" data-frame="meme-madness" onclick="selectFrame(this)">🎯 Madness</button>
-            <button class="frame-btn" data-frame="qualifier" onclick="selectFrame(this)">🏆 Qualifier</button>
-            <button class="frame-btn" data-frame="battle" onclick="selectFrame(this)">⚔️ Battle</button>
-            <button class="frame-btn" data-frame="classic" onclick="selectFrame(this)">🎉 Classic</button>
+            <button class="frame-btn active" data-frame="circular-1" onclick="selectFrame(this)">💫 Ring 1</button>
+            <button class="frame-btn" data-frame="circular-2" onclick="selectFrame(this)">💫 Ring 2</button>
+            <button class="frame-btn" data-frame="circular-3" onclick="selectFrame(this)">💫 Ring 3</button>
+            <button class="frame-btn" data-frame="circular-4" onclick="selectFrame(this)">💫 Ring 4</button>
           </div>
         </div>
 
@@ -289,7 +289,7 @@
     let selectedElement = null;
     let isDragging = false;
     let dragOffset = { x: 0, y: 0 };
-    let currentFrame = 'meme-madness';
+    let currentFrame = 'circular-1';
     
     // Load cone image
     const coneImage = new Image();
@@ -302,13 +302,33 @@
       draw();
     };
     
-    // Frames
-    const frames = {
-      'meme-madness': { bgColor: '#1a0a00', borderColor: '#FF9D00', hasBorder: true, pos: { x: 250, y: 140 }, size: 18 },
-      'qualifier': { bgColor: '#0a1a0a', borderColor: '#00E676', hasBorder: true, pos: { x: 250, y: 140 }, size: 18 },
-      'battle': { bgColor: '#1a0a1a', borderColor: '#8B2CFF', hasBorder: true, pos: { x: 250, y: 140 }, size: 18, dashed: true },
-      'classic': { bgColor: '#101010', hasBorder: false, pos: { x: 250, y: 130 }, size: 16 }
+    // Frames - circular PNG rings
+    const frameImages = {
+      'circular-1': null,
+      'circular-2': null,
+      'circular-3': null,
+      'circular-4': null
     };
+    
+    // Load circular frame images
+    const frameFileNames = {
+      'circular-1': 'frame1.png',
+      'circular-2': 'frame2.png',
+      'circular-3': 'frame3.png',
+      'circular-4': 'frame4.png'
+    };
+    
+    let framesLoaded = 0;
+    for (const [key, file] of Object.entries(frameFileNames)) {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        frameImages[key] = img;
+        framesLoaded++;
+        if (framesLoaded === 4) draw();
+      };
+      img.src = file;
+    }
 
     function getDisplaySize(el) {
       if (el.type === 'image' && el.image && el.image.complete) {
@@ -320,19 +340,17 @@
     }
 
     function draw() {
-      const frame = frames[currentFrame];
-      
-      // Background
-      ctx.fillStyle = frame.bgColor;
+      // Dark background
+      ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Border
-      if (frame.hasBorder) {
-        ctx.strokeStyle = frame.borderColor;
-        ctx.lineWidth = frame.dashed ? 4 : 6;
-        if (frame.dashed) ctx.setLineDash([12, 6]);
-        ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
-        ctx.setLineDash([]);
+      // Draw circular frame if loaded
+      const frameImg = frameImages[currentFrame];
+      if (frameImg) {
+        const frameSize = 420;
+        const frameX = (canvas.width - frameSize) / 2;
+        const frameY = (canvas.height - frameSize) / 2;
+        ctx.drawImage(frameImg, frameX, frameY, frameSize, frameSize);
       }
       
       // Background image
@@ -439,13 +457,12 @@
         return;
       }
       
-      const frame = frames[currentFrame];
       const el = {
         type: 'image',
         image: coneImage,
-        x: frame.pos.x,
-        y: frame.pos.y,
-        size: frame.size,
+        x: 250,
+        y: 250,
+        size: 80,
         rotation: 0,
       };
       
@@ -458,15 +475,7 @@
       document.querySelectorAll('.frame-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentFrame = btn.dataset.frame;
-      
-      // Reset cone position for new frame
-      if (elements.length > 0) {
-        const frame = frames[currentFrame];
-        elements[0].x = frame.pos.x;
-        elements[0].y = frame.pos.y;
-        elements[0].size = frame.size;
-        draw();
-      }
+      draw();
     }
     
     function deleteSelected() {
@@ -482,7 +491,7 @@
       draw();
       
       const link = document.createElement('a');
-      link.download = `cade-meme-madness-${currentFrame}.png`;
+      link.download = `cade-conify-${currentFrame}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
       
