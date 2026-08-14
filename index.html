@@ -319,6 +319,11 @@
 
       <div class="tray">
         <div class="tray-section">
+          <div class="tray-label">Upload</div>
+          <button class="action-btn upload-btn" onclick="document.getElementById('upload').click()">📁 Upload PFP</button>
+        </div>
+
+        <div class="tray-section">
           <div class="tray-label">Cone</div>
           <button class="action-btn cone-btn" onclick="addCone()">🎩 Add Cone</button>
         </div>
@@ -459,7 +464,7 @@
         ctx.fillText('Upload PFP', canvas.width / 2, canvas.height / 2 + 30);
         ctx.font = '28px Space Grotesk';
         ctx.fillStyle = '#444';
-        ctx.fillText('Tap anywhere to upload', canvas.width / 2, canvas.height / 2 + 80);
+        ctx.fillText('Tap button below to upload', canvas.width / 2, canvas.height / 2 + 80);
       }
 
       // Draw elements (cone and badges)
