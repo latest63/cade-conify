@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CADE Conify — Party Cone PFP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #101010;
+      --bg-card: #151515;
+      --orange: #FF9D00;
+      --orange-bright: #FFB000;
+      --purple: #8B2CFF;
+      --purple-dark: #6A00FF;
+      --white-warm: #F5F0E8;
+      --green: #00E676;
+      --red: #FF3D71;
+      --black-outline: #0a0a0a;
+      --shadow-offset: 4px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg-deep);
+      color: var(--white-warm);
+      font-family: 'Space Grotesk', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Halftone noise overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 8px 8px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      padding: 30px 0 20px;
+    }
+
+    .logo {
+      font-family: 'Bangers', cursive;
+      font-size: 3.5rem;
+      letter-spacing: 4px;
+      color: var(--orange);
+      text-shadow: 
+        3px 3px 0 var(--black-outline),
+        -1px -1px 0 var(--black-outline),
+        1px -1px 0 var(--black-outline),
+        -1px 1px 0 var(--black-outline);
+      transform: rotate(-2deg);
+      display: inline-block;
+      line-height: 1;
+    }
+
+    .logo span {
+      color: var(--purple);
+    }
+
+    .tagline {
+      font-size: 0.85rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-top: 8px;
+    }
+
+    /* Starburst decoration */
+    .starburst {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .starburst-1 { top: 60px; right: 80px; animation: spin 20s linear infinite; }
+    .starburst-2 { top: 300px; left: 40px; animation: spin 15s linear infinite reverse; }
+    .starburst-3 { bottom: 100px; right: 60px; animation: spin 25s linear infinite; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Main layout */
+    .editor-layout {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      margin-top: 30px;
+    }
+
+    @media (max-width: 900px) {
+      .editor-layout { flex-direction: column; align-items: center; }
+    }
+
+    /* Canvas area */
+    .canvas-stage {
+      flex: 1;
+      max-width: 520px;
+    }
+
+    .canvas-wrapper {
+      position: relative;
+      background: var(--bg-card);
+      border: 3px solid #2a2a2a;
+      border-radius: 4px;
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--black-outline);
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      cursor: crosshair;
+    }
+
+    /* Comic explosion when conified */
+    .conify-burst {
+      position: fixed;
+      pointer-events: none;
+      z-index: 100;
+      font-family: 'Bangers', cursive;
+      font-size: 2rem;
+      color: var(--orange);
+      text-shadow: 2px 2px 0 var(--black-outline);
+      animation: burst-pop 0.6s ease-out forwards;
+    }
+
+    @keyframes burst-pop {
+      0% { transform: scale(0) rotate(-20deg); opacity: 1; }
+      50% { transform: scale(1.3) rotate(5deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg) translateY(-40px); opacity: 0; }
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg-card);
+      border: 2px solid #2a2a2a;
+      border-radius: 4px;
+      padding: 16px;
+      box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--black-outline);
+      transition: transform 0.15s;
+    }
+
+    .card:hover {
+      transform: translate(-1px, -1px);
+    }
+
+    .card-title {
+      font-family: 'Bangers', cursive;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      color: var(--orange);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-title::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: var(--purple);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+
+    /* Upload button */
+    .upload-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 14px 20px;
+      background: var(--orange);
+      color: #000;
+      font-family: 'Bangers', cursive;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 var(--black-outline);
+      transition: all 0.1s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .upload-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .upload-btn:hover {
+      background: var(--orange-bright);
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--black-outline);
+    }
+
+    .upload-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--black-outline);
+    }
+
+    input[type="file"] { display: none; }
+
+    /* Element grid */
+    .elements-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .element-btn {
+      background: #1e1e1e;
+      border: 2px solid #333;
+      border-radius: 4px;
+      padding: 12px 4px;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.1s;
+      box-shadow: 2px 2px 0 var(--black-outline);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .element-btn .label {
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #888;
+    }
+
+    .element-btn:hover {
+      background: var(--orange);
+      color: #000;
+      border-color: var(--orange);
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 var(--black-outline);
+    }
+
+    .element-btn:active {
+      transform: translate(1px, 1px);
+      box-shadow: 1px 1px 0 var(--black-outline);
+    }
+
+    .element-btn.selected {
+      background: var(--purple);
+      border-color: var(--purple);
+      color: #fff;
+    }
+
+    /* Sliders */
+    .slider-group {
+      margin-bottom: 14px;
+    }
+
+    .slider-group label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.7rem;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+    }
+
+    .slider-group label span {
+      color: var(--orange);
+      font-weight: 700;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--orange);
+      cursor: pointer;
+    }
+
+    /* Action buttons */
+    .action-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .action-btn {
+      width: 100%;
+      padding: 12px 16px;
+      font-family: 'Bangers', cursive;
+      font-size: 0.95rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 3px 3px 0 var(--black-outline);
+      transition: all 0.1s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--black-outline);
+    }
+
+    .action-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--black-outline);
+    }
+
+    .action-btn.orange {
+      background: var(--orange);
+      color: #000;
+    }
+
+    .action-btn.purple {
+      background: var(--purple);
+      color: #fff;
+    }
+
+    .action-btn.red {
+      background: var(--red);
+      color: #fff;
+    }
+
+    .action-btn.dark {
+      background: #2a2a2a;
+      color: #fff;
+      border: 2px solid #444;
+    }
+
+    .action-btn.dark:hover {
+      background: #333;
+      border-color: var(--orange);
+    }
+
+    /* Instructions */
+    .hint-bar {
+      background: #1a1a1a;
+      border-left: 3px solid var(--orange);
+      padding: 10px 14px;
+      font-size: 0.7rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height: 1.6;
+    }
+
+    .hint-bar strong { color: var(--orange); }
+
+    /* Lightning bolt decoration */
+    .lightning {
+      position: fixed;
+      opacity: 0.04;
+      pointer-events: none;
+      font-size: 20rem;
+      color: var(--orange);
+      font-family: 'Bangers', cursive;
+      z-index: 0;
+    }
+
+    .lightning-1 { top: -50px; left: -50px; }
+    .lightning-2 { bottom: -80px; right: -30px; color: var(--purple); }
+
+    /* Ripped edge effect */
+    .ripped-edge {
+      height: 8px;
+      background: var(--bg-deep);
+      background-image: linear-gradient(135deg, transparent 33.33%, var(--bg-card) 33.33%, var(--bg-card) 66.66%, transparent 66.66%),
+                        linear-gradient(225deg, transparent 33.33%, var(--bg-card) 33.33%, var(--bg-card) 66.66%, transparent 66.66%);
+      background-size: 16px 8px;
+      background-position: 0 0, 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background decorations -->
+  <div class="lightning lightning-1">⚡</div>
+  <div class="lightning lightning-2">⚡</div>
+
+  <svg style="position:absolute;top:80px;right:60px;width:100px;height:100px;opacity:0.1" viewBox="0 0 100 100">
+    <polygon points="50,5 61,35 95,38 70,60 76,95 50,75 24,95 30,60 5,38 39,35" fill="#FF9D00"/>
+  </svg>
+  <svg style="position:absolute;top:280px;left:30px;width:80px;height:80px;opacity:0.08;animation:spin 12s linear infinite" viewBox="0 0 100 100">
+    <polygon points="50,5 61,35 95,38 70,60 76,95 50,75 24,95 30,60 5,38 39,35" fill="#8B2CFF"/>
+  </svg>
+
+  <div class="app-shell">
+    <header>
+      <h1 class="logo">CADE <span>CONIFY</span></h1>
+      <p class="tagline">☠️ Party cone your PFP ☠️</p>
+    </header>
+
+    <div class="ripped-edge"></div>
+
+    <div class="editor-layout">
+      <!-- Canvas Stage -->
+      <div class="canvas-stage">
+        <div class="canvas-wrapper">
+          <canvas id="canvas" width="500" height="500"></canvas>
+        </div>
+        <div class="hint-bar" style="margin-top: 10px;">
+          <strong>How to:</strong> Upload PFP → Pick element → Click canvas to place → Drag to move → Sliders to resize/rotate → Download
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Upload -->
+        <div class="card">
+          <div class="card-title">Upload PFP</div>
+          <input type="file" id="upload" accept="image/*">
+          <button class="upload-btn" onclick="document.getElementById('upload').click()">
+            📁 Choose Image
+          </button>
+        </div>
+
+        <!-- Elements -->
+        <div class="card">
+          <div class="card-title">Pick Element</div>
+          <div class="elements-grid">
+            <button class="element-btn" data-type="cone" title="CADE Party Cone">
+              🎉<span class="label">Cone</span>
+            </button>
+            <button class="element-btn" data-type="splash" title="Explosion">
+              💥<span class="label">Boom</span>
+            </button>
+            <button class="element-btn" data-type="bang" title="Spark Bang">
+              💫<span class="label">Bang</span>
+            </button>
+            <button class="element-btn" data-type="bubble" title="Bubble Chat">
+              💬<span class="label">Chat</span>
+            </button>
+            <button class="element-btn" data-type="star" title="Star Burst">
+              ⭐<span class="label">Star</span>
+            </button>
+            <button class="element-btn" data-type="confetti" title="Confetti">
+              ✨<span class="label">Confetti</span>
+            </button>
+            <button class="element-btn" data-type="balloon" title="Balloon">
+              🎈<span class="label">Balloon</span>
+            </button>
+            <button class="element-btn" data-type="skull" title="Skull">
+              💀<span class="label">Skull</span>
+            </button>
+            <button class="element-btn" data-type="text" title="Add Text">
+              🔤<span class="label">Text</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Transform -->
+        <div class="card" id="transform-panel">
+          <div class="card-title">Transform</div>
+          <div class="slider-group">
+            <label>Size <span id="size-val">100%</span></label>
+            <input type="range" id="size" min="20" max="250" value="100">
+          </div>
+          <div class="slider-group">
+            <label>Rotate <span id="rotate-val">0°</span></label>
+            <input type="range" id="rotate" min="-180" max="180" value="0">
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="card">
+          <div class="card-title">Actions</div>
+          <div class="action-row">
+            <button class="action-btn purple" onclick="addCustomText()">+ Add Text</button>
+            <button class="action-btn red" onclick="deleteSelected()">🗑 Delete Selected</button>
+            <button class="action-btn orange" onclick="downloadImage()">⬇ Download PNG</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let backgroundImage = null;
+    let elements = [];
+    let selectedElement = null;
+    let isDragging = false;
+    let dragOffset = { x: 0, y: 0 };
+    
+    // Load the actual cone image
+    const coneImage = new Image();
+    coneImage.src = 'cone.png';
+    coneImage.crossOrigin = 'anonymous';
+
+    // Element definitions
+    const elementTypes = {
+      cone: { type: 'image', src: coneImage, defaultSize: 200, defaultPos: { x: 250, y: 20 } },
+      splash: { emoji: '💥', defaultSize: 100, defaultPos: { x: 120, y: 130 } },
+      bang: { emoji: '💫', defaultSize: 80, defaultPos: { x: 380, y: 90 } },
+      bubble: { emoji: '💬', defaultSize: 90, defaultPos: { x: 90, y: 350 } },
+      star: { emoji: '⭐', defaultSize: 70, defaultPos: { x: 410, y: 280 } },
+      confetti: { emoji: '✨', defaultSize: 80, defaultPos: { x: 180, y: 420 } },
+      balloon: { emoji: '🎈', defaultSize: 85, defaultPos: { x: 320, y: 180 } },
+      skull: { emoji: '💀', defaultSize: 75, defaultPos: { x: 430, y: 400 } },
+    };
+
+    // Halftone pattern for background
+    function createHalftonePattern() {
+      const patternCanvas = document.createElement('canvas');
+      patternCanvas.width = 8;
+      patternCanvas.height = 8;
+      const pctx = patternCanvas.getContext('2d');
+      pctx.fillStyle = '#151515';
+      pctx.fillRect(0, 0, 8, 8);
+      pctx.fillStyle = '#1a1a1a';
+      pctx.beginPath();
+      pctx.arc(4, 4, 1.5, 0, Math.PI * 2);
+      pctx.fill();
+      return patternCanvas;
+    }
+
+    // Draw initial state
+    function draw() {
+      // Fill background with halftone-like pattern
+      ctx.fillStyle = '#151515';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw halftone dots
+      ctx.fillStyle = '#1a1a1a';
+      for (let x = 4; x < canvas.width; x += 8) {
+        for (let y = 4; y < canvas.height; y += 8) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      
+      // Draw background if exists
+      if (backgroundImage) {
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+      }
+      
+      // Draw elements
+      elements.forEach(el => {
+        drawElement(el, el === selectedElement);
+      });
+    }
+    
+    function drawElement(el, selected) {
+      ctx.save();
+      ctx.translate(el.x, el.y);
+      ctx.rotate(el.rotation * Math.PI / 180);
+      ctx.scale(el.size / 100, el.size / 100);
+      
+      // Image elements (like the cone)
+      if (el.type === 'image' && el.image && el.image.complete) {
+        const w = el.image.naturalWidth;
+        const h = el.image.naturalHeight;
+        ctx.drawImage(el.image, -w/2, -h/2, w, h);
+      } else if (el.type === 'text') {
+        ctx.font = 'bold 48px Bangers, cursive';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.strokeStyle = '#0a0a0a';
+        ctx.lineWidth = 6;
+        ctx.strokeText(el.emoji, 0, 0);
+        ctx.fillStyle = '#FF9D00';
+        ctx.fillText(el.emoji, 0, 0);
+      } else {
+        ctx.font = '80px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(el.emoji, 0, 0);
+      }
+      
+      // Selection indicator - comic style
+      if (selected) {
+        ctx.restore();
+        ctx.save();
+        ctx.translate(el.x, el.y);
+        ctx.strokeStyle = '#FF9D00';
+        ctx.lineWidth = 3;
+        ctx.setLineDash([8, 4]);
+        const half = el.size / 2;
+        ctx.strokeRect(-half, -half, half * 2, half * 2);
+        ctx.setLineDash([]);
+      }
+      
+      ctx.restore();
+    }
+    
+    // Upload handler
+    document.getElementById('upload').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.onload = () => {
+          backgroundImage = img;
+          draw();
+          showBurst('UPLOAD!', canvas.width/2, 40);
+        };
+        img.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    });
+    
+    // Element buttons
+    document.querySelectorAll('.element-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.dataset.type;
+        if (type === 'text') {
+          addCustomText();
+          return;
+        }
+        addElement(type);
+      });
+    });
+    
+    function addElement(type) {
+      const def = elementTypes[type];
+      if (!def) return;
+      
+      let el;
+      if (def.type === 'image') {
+        el = {
+          type: 'image',
+          image: def.src,
+          x: def.defaultPos.x,
+          y: def.defaultPos.y,
+          size: def.defaultSize,
+          rotation: 0,
+        };
+      } else {
+        el = {
+          type,
+          emoji: def.emoji,
+          x: def.defaultPos.x,
+          y: def.defaultPos.y,
+          size: def.defaultSize,
+          rotation: 0,
+        };
+      }
+      
+      elements.push(el);
+      selectElement(el);
+      draw();
+      showBurst('POW!', el.x, el.y);
+    }
+    
+    function addCustomText() {
+      const text = prompt('Enter your text:', 'CADE');
+      if (!text) return;
+      
+      elements.push({
+        type: 'text',
+        emoji: text,
+        x: 250,
+        y: 250,
+        size: 60,
+        rotation: 0,
+      });
+      
+      selectElement(elements[elements.length - 1]);
+      draw();
+      showBurst('WOW!', 250, 200);
+    }
+    
+    function selectElement(el) {
+      selectedElement = el;
+      updateTransform();
+      draw();
+    }
+    
+    function deleteSelected() {
+      if (!selectedElement) return;
+      elements = elements.filter(e => e !== selectedElement);
+      selectedElement = null;
+      updateTransform();
+      draw();
+    }
+    
+    function updateTransform() {
+      if (!selectedElement) return;
+      document.getElementById('size').value = selectedElement.size;
+      document.getElementById('size-val').textContent = selectedElement.size + '%';
+      document.getElementById('rotate').value = selectedElement.rotation;
+      document.getElementById('rotate-val').textContent = selectedElement.rotation + '°';
+    }
+    
+    // Slider handlers
+    document.getElementById('size').addEventListener('input', (e) => {
+      if (!selectedElement) return;
+      selectedElement.size = parseInt(e.target.value);
+      document.getElementById('size-val').textContent = selectedElement.size + '%';
+      draw();
+    });
+    
+    document.getElementById('rotate').addEventListener('input', (e) => {
+      if (!selectedElement) return;
+      selectedElement.rotation = parseInt(e.target.value);
+      document.getElementById('rotate-val').textContent = selectedElement.rotation + '°';
+      draw();
+    });
+    
+    // Canvas interaction
+    canvas.addEventListener('mousedown', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (e.clientX - rect.left) * scaleX;
+      const y = (e.clientY - rect.top) * scaleY;
+      
+      // Find clicked element (reverse order for top-most)
+      for (let i = elements.length - 1; i >= 0; i--) {
+        const el = elements[i];
+        const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
+        if (dist < el.size / 2) {
+          selectElement(el);
+          isDragging = true;
+          dragOffset = { x: x - el.x, y: y - el.y };
+          return;
+        }
+      }
+      
+      // Clicked empty space
+      selectedElement = null;
+      updateTransform();
+      draw();
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+      if (!isDragging || !selectedElement) return;
+      
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      selectedElement.x = (e.clientX - rect.left) * scaleX - dragOffset.x;
+      selectedElement.y = (e.clientY - rect.top) * scaleY - dragOffset.y;
+      draw();
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+      isDragging = false;
+    });
+    
+    // Burst animation
+    function showBurst(text, x, y) {
+      const burst = document.createElement('div');
+      burst.className = 'conify-burst';
+      burst.textContent = text;
+      burst.style.left = x + 'px';
+      burst.style.top = y + 'px';
+      document.body.appendChild(burst);
+      setTimeout(() => burst.remove(), 700);
+    }
+    
+    // Download
+    function downloadImage() {
+      const wasSelected = selectedElement;
+      selectedElement = null;
+      draw();
+      
+      const link = document.createElement('a');
+      link.download = 'cade-conify.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+      
+      selectedElement = wasSelected;
+      draw();
+      showBurst('SAVED!', canvas.width/2, canvas.height - 50);
+    }
+    
+    // Initial draw
+    draw();
+  </script>
+</body>
+</html>
