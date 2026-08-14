@@ -440,8 +440,8 @@
         hasBorder: true,
         borderColor: '#FF9D00',
         borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 120 },
-        coneDefaultSize: 45,
+        coneDefaultPos: { x: 250, y: 140 },
+        coneDefaultSize: 30,
       },
       'qualifier': {
         name: 'Qualifier',
@@ -450,8 +450,8 @@
         hasBorder: true,
         borderColor: '#00E676',
         borderStyle: 'solid',
-        coneDefaultPos: { x: 250, y: 120 },
-        coneDefaultSize: 45,
+        coneDefaultPos: { x: 250, y: 140 },
+        coneDefaultSize: 30,
       },
       'battle': {
         name: 'Battle',
@@ -460,16 +460,16 @@
         hasBorder: true,
         borderColor: '#8B2CFF',
         borderStyle: 'dashed',
-        coneDefaultPos: { x: 250, y: 120 },
-        coneDefaultSize: 45,
+        coneDefaultPos: { x: 250, y: 140 },
+        coneDefaultSize: 30,
       },
       'classic': {
         name: 'Classic',
         bgColor: '#101010',
         accentColor: '#FF9D00',
         hasBorder: false,
-        coneDefaultPos: { x: 250, y: 100 },
-        coneDefaultSize: 40,
+        coneDefaultPos: { x: 250, y: 120 },
+        coneDefaultSize: 28,
       }
     };
 
@@ -532,8 +532,10 @@
         ctx.strokeStyle = '#FF9D00';
         ctx.lineWidth = 3;
         ctx.setLineDash([8, 4]);
-        const half = el.size * 200 / 100;
-        ctx.strokeRect(-half/2, -half/2, half, half);
+        // Draw selection box around the element based on its rendered size
+        const displayW = (el.type === 'image' && el.image) ? el.image.naturalWidth * (el.size / 100) : el.size;
+        const displayH = (el.type === 'image' && el.image) ? el.image.naturalHeight * (el.size / 100) : el.size;
+        ctx.strokeRect(-displayW/2 - 5, -displayH/2 - 5, displayW + 10, displayH + 10);
         ctx.setLineDash([]);
       }
       
