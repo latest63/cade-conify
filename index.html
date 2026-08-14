@@ -73,43 +73,16 @@
       margin-top: 15px;
     }
 
-    @media (min-width: 768px) {
-      .editor-layout {
-        flex-direction: row;
-        align-items: flex-start;
-      }
-    }
-
     .canvas-stage {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .canvas-wrapper {
-      position: relative;
-      background: var(--bg-card);
-      border: 3px solid #2a2a2a;
-      border-radius: 4px;
-      overflow: hidden;
-      touch-action: none;
-    }
-
-    canvas {
-      display: block;
       width: 100%;
-      height: auto;
-      cursor: grab;
+      max-width: 500px;
+      margin: 0 auto;
     }
 
-    canvas:active {
-      cursor: grabbing;
-    }
-
-    /* Horizontal tray */
     .tray {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       align-items: center;
       justify-content: center;
       padding: 12px;
@@ -118,27 +91,26 @@
       border-radius: 4px;
     }
 
-    @media (min-width: 768px) {
-      .tray {
-        flex-direction: column;
-        align-items: stretch;
-        width: 280px;
-        flex-shrink: 0;
-      }
+    .tray-section {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
-    .tray-section {
-      flex: 1;
-      min-width: 120px;
+    .tray-divider {
+      width: 2px;
+      height: 40px;
+      background: #333;
+      align-self: center;
     }
 
     .tray-label {
       font-family: 'Bangers', cursive;
-      font-size: 0.75rem;
+      font-size: 0.6rem;
       letter-spacing: 2px;
       color: var(--orange);
       text-transform: uppercase;
-      margin-bottom: 8px;
+      text-align: center;
     }
 
     .frame-grid {
@@ -259,6 +231,8 @@
           <button class="action-btn upload-btn" onclick="document.getElementById('upload').click()">📁 PFP</button>
         </div>
 
+        <div class="tray-divider"></div>
+
         <div class="tray-section">
           <div class="tray-label">Frame</div>
           <div class="frame-grid">
@@ -268,6 +242,8 @@
             <button class="frame-btn" data-frame="circular-4" onclick="selectFrame(this)">💫 Ring 4</button>
           </div>
         </div>
+
+        <div class="tray-divider"></div>
 
         <div class="tray-section">
           <div class="tray-label">Actions</div>
