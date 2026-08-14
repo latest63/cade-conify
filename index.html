@@ -288,30 +288,25 @@
         </div>
         <!-- Badge preview gallery -->
         <div class="badge-gallery">
-          <img src="badge1.png" alt="Badge 1" class="badge-thumb selected" onclick="selectBadge(0)">
-          <img src="badge2.png" alt="Badge 2" class="badge-thumb" onclick="selectBadge(1)">
-          <img src="badge3.png" alt="Badge 3" class="badge-thumb" onclick="selectBadge(2)">
-          <img src="badge4.png" alt="Badge 4" class="badge-thumb" onclick="selectBadge(3)">
-          <img src="badge5.png" alt="Badge 5" class="badge-thumb" onclick="selectBadge(4)">
+          <img src="badge1.png" alt="Badge 1" class="badge-thumb selected" onclick="addBadgeByIndex(0)">
+          <img src="badge2.png" alt="Badge 2" class="badge-thumb" onclick="addBadgeByIndex(1)">
+          <img src="badge3.png" alt="Badge 3" class="badge-thumb" onclick="addBadgeByIndex(2)">
+          <img src="badge4.png" alt="Badge 4" class="badge-thumb" onclick="addBadgeByIndex(3)">
+          <img src="badge5.png" alt="Badge 5" class="badge-thumb" onclick="addBadgeByIndex(4)">
         </div>
       </div>
 
       <div class="tray">
         <div class="tray-section">
-          <div class="tray-label">Badges</div>
-          <button class="action-btn cone-btn" onclick="addBadge(selectedBadgeIndex)">🏅 Add Selected</button>
-        </div>
-
-        <div class="tray-section">
           <div class="tray-label">Cone</div>
-          <button class="action-btn cone-btn" onclick="addCone()">🎩 Add</button>
+          <button class="action-btn cone-btn" onclick="addCone()">🎩 Add Cone</button>
         </div>
 
         <div class="tray-section">
           <div class="tray-label">Actions</div>
           <div class="action-buttons">
-            <button class="action-btn delete-btn" onclick="deleteSelected()">🗑</button>
-            <button class="action-btn download-btn" onclick="downloadImage()">⬇</button>
+            <button class="action-btn delete-btn" onclick="deleteSelected()">🗑 Delete</button>
+            <button class="action-btn download-btn" onclick="downloadImage()">⬇ Save</button>
           </div>
         </div>
       </div>
@@ -713,14 +708,12 @@
       draw();
     }
 
-    function addBadge() {
-      // Get selected badge from dropdown
-      const select = document.getElementById('badgeSelect');
-      const badgeFile = select.value;
+    function addBadgeByIndex(index) {
+      const badgeFile = badgeImages[index];
       const img = badgeImageObjects[badgeFile];
       
       if (!img || !img.complete) {
-        setTimeout(addBadge, 50);
+        setTimeout(() => addBadgeByIndex(index), 50);
         return;
       }
 
@@ -736,6 +729,7 @@
 
       elements.push(el);
       selectedElement = el;
+      selectBadge(index);
       draw();
     }
     
