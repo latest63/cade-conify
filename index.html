@@ -320,17 +320,36 @@
       ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Background image (PFP upload)
-      if (backgroundImage) {
-        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-      }
-
-      // Draw circular frame ON TOP
+      // Draw circular frame ON TOP first (so we can clip to it)
       const frameImg = frameImages[currentFrame];
       if (frameImg) {
         const frameSize = 420;
         const frameX = (canvas.width - frameSize) / 2;
         const frameY = (canvas.height - frameSize) / 2;
+        
+        // Create circular clip for frame
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(frameX + frameSize/2, frameY + frameSize/2, frameSize/2, 0, Math.PI * 2);
+        ctx.clip();
+        
+        // Background image (PFP upload) - scaled to fill frame area
+        if (backgroundImage) {
+          const scale = Math.max(frameSize / backgroundImage.naturalWidth, 
+                                  frameSize / backgroundImage.naturalHeight);
+          const w = backgroundImage.naturalWidth * scale;
+          const h = backgroundImage.naturalHeight * scale;
+          const x = frameX + (frameSize - w) / 2;
+          const y = frameY + (frameSize - h) / 2;
+          ctx.drawImage(backgroundImage, x, y, w, h);
+        } else {
+          ctx.fillStyle = '#2a2a2a';
+          ctx.fillRect(frameX, frameY, frameSize, frameSize);
+        }
+        
+        ctx.restore();
+        
+        // Draw frame overlay
         ctx.drawImage(frameImg, frameX, frameY, frameSize, frameSize);
       }
 
