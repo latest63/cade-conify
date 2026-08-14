@@ -19,8 +19,12 @@
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
+    body {\
       background: var(--bg-deep);
+      background-image: 
+        radial-gradient(ellipse at 20% 20%, rgba(139, 44, 255, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(255, 157, 0, 0.06) 0%, transparent 50%),
+        linear-gradient(180deg, #0d0d0d 0%, #101010 50%, #0d0d0d 100%);
       color: var(--white-warm);
       font-family: 'Space Grotesk', sans-serif;
       min-height: 100vh;
