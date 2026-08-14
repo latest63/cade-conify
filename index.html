@@ -111,6 +111,39 @@
       gap: 4px;
     }
 
+    /* Badge preview gallery */
+    .badge-gallery {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      padding: 10px;
+      background: var(--bg-card);
+      border: 2px solid #2a2a2a;
+      border-radius: 4px;
+      margin-top: 10px;
+    }
+
+    .badge-thumb {
+      width: 60px;
+      height: 40px;
+      object-fit: contain;
+      border: 2px solid #333;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.1s;
+      background: #1e1e1e;
+    }
+
+    .badge-thumb:hover {
+      border-color: var(--orange);
+      transform: scale(1.1);
+    }
+
+    .badge-thumb.selected {
+      border-color: var(--purple);
+      box-shadow: 0 0 8px var(--purple);
+    }
+
     .frame-btn {
       background: #1e1e1e;
       border: 2px solid #333;
@@ -256,16 +289,20 @@
         <div class="hint-bar">
           <strong>Tap Add</strong> to place elements · <strong>Select</strong> to pinch/drag/rotate
         </div>
+        <!-- Badge preview gallery -->
+        <div class="badge-gallery">
+          <img src="badge1.png" alt="Badge 1" class="badge-thumb selected" onclick="selectBadge(0)">
+          <img src="badge2.png" alt="Badge 2" class="badge-thumb" onclick="selectBadge(1)">
+          <img src="badge3.png" alt="Badge 3" class="badge-thumb" onclick="selectBadge(2)">
+          <img src="badge4.png" alt="Badge 4" class="badge-thumb" onclick="selectBadge(3)">
+          <img src="badge5.png" alt="Badge 5" class="badge-thumb" onclick="selectBadge(4)">
+        </div>
       </div>
 
       <div class="tray">
         <div class="tray-section">
-          <div class="tray-label">Badge</div>
-          <select id="badgeSelect" style="width: 100%; padding: 8px; background: #1e1e1e; color: #fff; border: 2px solid #333; border-radius: 4px;">
-            <option value="badge1.png">🏅 Badge 1</option>
-            <option value="badge2.png">🏅 Badge 2</option>
-          </select>
-          <button class="action-btn cone-btn" onclick="addBadge()" style="margin-top: 4px;">➕ Add</button>
+          <div class="tray-label">Badges</div>
+          <button class="action-btn cone-btn" onclick="addBadge(selectedBadgeIndex)">🏅 Add Selected</button>
         </div>
 
         <div class="tray-section">
@@ -291,7 +328,8 @@
     let backgroundImage = null;
     let elements = [];
     let selectedElement = null;
-    
+    let selectedBadgeIndex = 0;
+
     // State for interactions
     let interactionMode = null;
     let initialTouchDistance = null;
@@ -312,10 +350,10 @@
     };
     
     // Frames - removed, using badges now
-    const badgeImages = ['badge1.png', 'badge2.png'];
-    let currentBadgeIndex = 0;
+    const badgeImages = ['badge1.png', 'badge2.png', 'badge3.png', 'badge4.png', 'badge5.png'];
     const badgeImageObjects = {};
-    
+    const badgeNames = ['Badge 1', 'Badge 2', 'Badge 3', 'Badge 4', 'Badge 5'];
+
     // Load all badge images
     for (let i = 0; i < badgeImages.length; i++) {
       const img = new Image();
@@ -695,13 +733,26 @@
         image: img,
         x: 500,  // center of 1000px canvas
         y: 850,  // near bottom
-        size: 35,
+        size: 35,  // 35% to fit nicely as a banner
         rotation: 0,
       };
 
       elements.push(el);
       selectedElement = el;
       draw();
+    }
+    
+    function selectBadge(index) {
+      selectedBadgeIndex = index;
+      
+      // Update visual selection
+      document.querySelectorAll('.badge-thumb').forEach((thumb, i) => {
+        if (i === index) {
+          thumb.classList.add('selected');
+        } else {
+          thumb.classList.remove('selected');
+        }
+      });
     }
     
     function deleteSelected() {
