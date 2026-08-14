@@ -39,7 +39,7 @@
     }
 
     .logo-img {
-      max-width: 150px;
+      max-width: 50px;
       height: auto;
       display: block;
       margin: 0 auto;
@@ -264,7 +264,11 @@
 
         <div class="tray-section">
           <div class="tray-label">Badge</div>
-          <button class="action-btn cone-btn" onclick="addBadge()">🏅 Add Badge</button>
+          <select id="badgeSelect" style="width: 100%; padding: 8px; background: #1e1e1e; color: #fff; border: 2px solid #333; border-radius: 4px;">
+            <option value="badge1.png">🏅 Badge 1</option>
+            <option value="badge2.png">🏅 Badge 2</option>
+          </select>
+          <button class="action-btn cone-btn" onclick="addBadge()" style="margin-top: 4px;">➕ Add</button>
         </div>
 
         <div class="tray-section">
@@ -623,9 +627,9 @@
     }
 
     function addBadge() {
-      // Cycle through badge images
-      currentBadgeIndex = (currentBadgeIndex + 1) % badgeImages.length;
-      const badgeFile = badgeImages[currentBadgeIndex];
+      // Get selected badge from dropdown
+      const select = document.getElementById('badgeSelect');
+      const badgeFile = select.value;
       const img = badgeImageObjects[badgeFile];
       
       if (!img || !img.complete) {
