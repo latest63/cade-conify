@@ -342,7 +342,6 @@
     let elements = [];
     let selectedElement = null;
     let selectedBadgeIndex = 0;
-    let uploadOverlay = document.getElementById('uploadOverlay');
 
     // State for interactions
     let interactionMode = null;
@@ -461,11 +460,6 @@
         ctx.font = '28px Space Grotesk';
         ctx.fillStyle = '#444';
         ctx.fillText('Tap anywhere to upload', canvas.width / 2, canvas.height / 2 + 80);
-      }
-
-      // Toggle overlay visibility
-      if (uploadOverlay) {
-        uploadOverlay.style.display = (elements.length === 0 && !backgroundImage) ? 'block' : 'none';
       }
 
       // Draw elements (cone and badges)
@@ -665,31 +659,6 @@
         handleTwoTouch(e);
       }
     }, { passive: false });
-
-    // Overlay click handler for iOS
-    const uploadOverlay = document.getElementById('uploadOverlay');
-    if (uploadOverlay) {
-      uploadOverlay.addEventListener('click', (e) => {
-        if (elements.length === 0 && !backgroundImage) {
-          e.preventDefault();
-          e.stopPropagation();
-          const fileInput = document.getElementById('upload');
-          if (fileInput) {
-            fileInput.click();
-          }
-        }
-      });
-      uploadOverlay.addEventListener('touchstart', (e) => {
-        if (elements.length === 0 && !backgroundImage) {
-          e.preventDefault();
-          e.stopPropagation();
-          const fileInput = document.getElementById('upload');
-          if (fileInput) {
-            fileInput.click();
-          }
-        }
-      }, { passive: false });
-    }
 
     // Click handler for upload when canvas is empty (desktop fallback)
     canvas.addEventListener('click', (e) => {
