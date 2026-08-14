@@ -319,8 +319,13 @@
       // Dark background
       ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw circular frame if loaded
+
+      // Background image (PFP upload)
+      if (backgroundImage) {
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+      }
+
+      // Draw circular frame ON TOP
       const frameImg = frameImages[currentFrame];
       if (frameImg) {
         const frameSize = 420;
@@ -328,13 +333,8 @@
         const frameY = (canvas.height - frameSize) / 2;
         ctx.drawImage(frameImg, frameX, frameY, frameSize, frameSize);
       }
-      
-      // Background image
-      if (backgroundImage) {
-        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-      }
-      
-      // Draw elements
+
+      // Draw cone element
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
       });
