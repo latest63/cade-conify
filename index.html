@@ -652,13 +652,19 @@
         
         const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
         if (dist < hitRadius) {
-          selectElement(el);
-          isDragging = true;
-          dragOffset = { x: x - el.x, y: y - el.y };
+          // If already selected, start dragging
+          if (selectedElement === el) {
+            isDragging = true;
+            dragOffset = { x: x - el.x, y: y - el.y };
+          } else {
+            // Select this element
+            selectElement(el);
+          }
           return;
         }
       }
       
+      // Clicked empty space - deselect
       selectedElement = null;
       updateTransform();
       draw();
