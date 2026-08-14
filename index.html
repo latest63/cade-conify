@@ -798,13 +798,33 @@
     
     function downloadImage() {
       const wasSelected = selectedElement;
+      const savedCtx = ctx;
+      
+      // Create a temp canvas with glow effect
+      const tempCanvas = document.createElement('canvas');
+      tempCanvas.width = canvas.width;
+      tempCanvas.height = canvas.height;
+      const tempCtx = tempCanvas.getContext('2d');
+      
+      // Draw glow border (30px spread)
+      tempCtx.shadowColor = 'rgba(255, 157, 0, 0.5)';
+      tempCtx.shadowBlur = 30;
+      tempCtx.strokeStyle = '#FF9D00';
+      tempCtx.lineWidth = 1;
+      tempCtx.strokeRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw the actual canvas content
+      tempCtx.drawImage(canvas, 0, 0);
+      
+      // Restore and continue
+      ctx = savedCtx;
       selectedElement = null;
       draw();
 
       const link = document.createElement('a');
       const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
       link.download = `cade-conify-${timestamp}.png`;
-      link.href = canvas.toDataURL('image/png');
+      link.href = tempCanvas.toDataURL('image/png');
       link.click();
 
       selectedElement = wasSelected;
