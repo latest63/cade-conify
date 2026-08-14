@@ -12,7 +12,6 @@
       --bg-deep: #101010;
       --bg-card: #151515;
       --orange: #FF9D00;
-      --orange-bright: #FFB000;
       --purple: #8B2CFF;
       --white-warm: #F5F0E8;
       --black-outline: #0a0a0a;
@@ -31,17 +30,17 @@
     .app-shell {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 15px;
+      padding: 10px;
     }
 
     header {
       text-align: center;
-      padding: 15px 0;
+      padding: 15px 0 10px;
     }
 
     .logo {
       font-family: 'Bangers', cursive;
-      font-size: clamp(2rem, 8vw, 3.5rem);
+      font-size: clamp(1.8rem, 7vw, 3rem);
       letter-spacing: 4px;
       color: var(--orange);
       -webkit-text-stroke: 2px #fff;
@@ -59,19 +58,19 @@
     }
 
     .tagline {
-      font-size: 0.8rem;
+      font-size: 0.75rem;
       color: #666;
       text-transform: uppercase;
       letter-spacing: 2px;
       margin-top: 5px;
     }
 
-    /* Mobile-first layout */
+    /* Layout */
     .editor-layout {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      margin-top: 20px;
+      gap: 15px;
+      margin-top: 15px;
     }
 
     @media (min-width: 768px) {
@@ -99,72 +98,62 @@
       display: block;
       width: 100%;
       height: auto;
-      cursor: crosshair;
+      cursor: grab;
     }
 
-    .sidebar {
-      width: 100%;
-      max-width: 350px;
+    canvas:active {
+      cursor: grabbing;
+    }
+
+    /* Horizontal tray */
+    .tray {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      background: var(--bg-card);
+      border: 2px solid #2a2a2a;
+      border-radius: 4px;
     }
 
     @media (min-width: 768px) {
-      .sidebar {
-        width: 300px;
+      .tray {
+        flex-direction: column;
+        align-items: stretch;
+        width: 280px;
         flex-shrink: 0;
       }
     }
 
-    .card {
-      background: var(--bg-card);
-      border: 2px solid #2a2a2a;
-      border-radius: 4px;
-      padding: 12px;
-      margin-bottom: 12px;
+    .tray-section {
+      flex: 1;
+      min-width: 120px;
     }
 
-    .card-title {
+    .tray-label {
       font-family: 'Bangers', cursive;
-      font-size: 0.9rem;
+      font-size: 0.75rem;
       letter-spacing: 2px;
       color: var(--orange);
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
-
-    .upload-btn {
-      width: 100%;
-      padding: 12px;
-      background: var(--orange);
-      color: #000;
-      font-family: 'Bangers', cursive;
-      font-size: 1rem;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      box-shadow: 3px 3px 0 var(--black-outline);
-      transition: all 0.1s;
-    }
-
-    .upload-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black-outline); }
-    .upload-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black-outline); }
-
-    input[type="file"] { display: none; }
 
     .frame-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
+      gap: 6px;
     }
 
     .frame-btn {
       background: #1e1e1e;
       border: 2px solid #333;
       border-radius: 4px;
-      padding: 10px 6px;
+      padding: 8px 4px;
       color: #fff;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       font-weight: 600;
       cursor: pointer;
       text-align: center;
@@ -187,31 +176,50 @@
       color: #fff;
     }
 
-    .action-row {
+    .action-buttons {
       display: flex;
-      flex-direction: column;
       gap: 8px;
     }
 
     .action-btn {
-      width: 100%;
-      padding: 10px;
+      flex: 1;
+      padding: 10px 8px;
       font-family: 'Bangers', cursive;
-      font-size: 0.9rem;
-      letter-spacing: 2px;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
       text-transform: uppercase;
       border: none;
       border-radius: 4px;
       cursor: pointer;
       box-shadow: 3px 3px 0 var(--black-outline);
       transition: all 0.1s;
+      white-space: nowrap;
     }
 
-    .action-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black-outline); }
-    .action-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black-outline); }
+    .action-btn:hover {
+      transform: translate(-1px, -1px);
+      box-shadow: 4px 4px 0 var(--black-outline);
+    }
 
-    .action-btn.orange { background: var(--orange); color: #000; }
-    .action-btn.red { background: var(--red); color: #fff; }
+    .action-btn:active {
+      transform: translate(2px, 2px);
+      box-shadow: 1px 1px 0 var(--black-outline);
+    }
+
+    .upload-btn {
+      background: var(--orange);
+      color: #000;
+    }
+
+    .download-btn {
+      background: var(--orange);
+      color: #000;
+    }
+
+    .delete-btn {
+      background: var(--red);
+      color: #fff;
+    }
 
     .hint-bar {
       background: #1a1a1a;
@@ -225,18 +233,6 @@
     }
 
     .hint-bar strong { color: var(--orange); }
-
-    .instructions {
-      background: #1a1a1a;
-      border-left: 3px solid var(--purple);
-      padding: 10px;
-      font-size: 0.7rem;
-      color: #888;
-      margin-bottom: 12px;
-      line-height: 1.5;
-    }
-
-    .instructions strong { color: var(--orange); }
   </style>
 </head>
 <body>
@@ -252,43 +248,33 @@
           <canvas id="canvas" width="500" height="500"></canvas>
         </div>
         <div class="hint-bar">
-          <strong>Touch:</strong> Tap once to place cone · Tap again to select · Drag to move · Pull corners to resize · Pull top handle to rotate
+          <strong>Tap</strong> canvas to place cone · <strong>Drag</strong> to move
         </div>
       </div>
 
-      <div class="sidebar">
-        <div class="card">
-          <div class="card-title">Upload PFP</div>
-          <input type="file" id="upload" accept="image/*">
-          <button class="upload-btn" onclick="document.getElementById('upload').click()">📁 Choose Image</button>
+      <div class="tray">
+        <div class="tray-section">
+          <div class="tray-label">Upload</div>
+          <input type="file" id="upload" accept="image/*" style="display: none;">
+          <button class="action-btn upload-btn" onclick="document.getElementById('upload').click()">📁 PFP</button>
         </div>
 
-        <div class="card">
-          <div class="card-title">Select Frame</div>
+        <div class="tray-section">
+          <div class="tray-label">Frame</div>
           <div class="frame-grid">
-            <button class="frame-btn active" data-frame="meme-madness" onclick="selectFrame(this)">🎯 Meme Madness</button>
+            <button class="frame-btn active" data-frame="meme-madness" onclick="selectFrame(this)">🎯 Madness</button>
             <button class="frame-btn" data-frame="qualifier" onclick="selectFrame(this)">🏆 Qualifier</button>
             <button class="frame-btn" data-frame="battle" onclick="selectFrame(this)">⚔️ Battle</button>
             <button class="frame-btn" data-frame="classic" onclick="selectFrame(this)">🎉 Classic</button>
           </div>
         </div>
 
-        <div class="card">
-          <div class="card-title">Actions</div>
-          <div class="action-row">
-            <button class="action-btn red" onclick="deleteSelected()">🗑 Delete</button>
-            <button class="action-btn orange" onclick="downloadImage()">⬇ Download PNG</button>
+        <div class="tray-section">
+          <div class="tray-label">Actions</div>
+          <div class="action-buttons">
+            <button class="action-btn delete-btn" onclick="deleteSelected()">🗑 Delete</button>
+            <button class="action-btn download-btn" onclick="downloadImage()">⬇ Save</button>
           </div>
-        </div>
-
-        <div class="instructions">
-          <strong>How to use:</strong><br>
-          1. Upload your PFP<br>
-          2. Tap canvas → cone appears<br>
-          3. Tap cone again → selected<br>
-          4. Drag to move<br>
-          5. Pull corner handles ↕↔ to resize<br>
-          6. Pull top handle ↑↓ to rotate
         </div>
       </div>
     </div>
@@ -302,13 +288,10 @@
     let elements = [];
     let selectedElement = null;
     let isDragging = false;
-    let isResizing = false;
-    let isRotating = false;
     let dragOffset = { x: 0, y: 0 };
-    let resizeHandle = null;
     let currentFrame = 'meme-madness';
     
-    // Load the actual cone image
+    // Load cone image
     const coneImage = new Image();
     coneImage.src = 'cone.png';
     coneImage.crossOrigin = 'anonymous';
@@ -319,12 +302,12 @@
       draw();
     };
     
-    // Frame configurations
+    // Frames
     const frames = {
-      'meme-madness': { bgColor: '#1a0a00', borderColor: '#FF9D00', hasBorder: true, coneDefaultPos: { x: 250, y: 140 }, coneDefaultSize: 18 },
-      'qualifier': { bgColor: '#0a1a0a', borderColor: '#00E676', hasBorder: true, coneDefaultPos: { x: 250, y: 140 }, coneDefaultSize: 18 },
-      'battle': { bgColor: '#1a0a1a', borderColor: '#8B2CFF', hasBorder: true, coneDefaultPos: { x: 250, y: 140 }, coneDefaultSize: 18, borderStyle: 'dashed' },
-      'classic': { bgColor: '#101010', hasBorder: false, coneDefaultPos: { x: 250, y: 130 }, coneDefaultSize: 16 }
+      'meme-madness': { bgColor: '#1a0a00', borderColor: '#FF9D00', hasBorder: true, pos: { x: 250, y: 140 }, size: 18 },
+      'qualifier': { bgColor: '#0a1a0a', borderColor: '#00E676', hasBorder: true, pos: { x: 250, y: 140 }, size: 18 },
+      'battle': { bgColor: '#1a0a1a', borderColor: '#8B2CFF', hasBorder: true, pos: { x: 250, y: 140 }, size: 18, dashed: true },
+      'classic': { bgColor: '#101010', hasBorder: false, pos: { x: 250, y: 130 }, size: 16 }
     };
 
     function getDisplaySize(el) {
@@ -339,21 +322,25 @@
     function draw() {
       const frame = frames[currentFrame];
       
+      // Background
       ctx.fillStyle = frame.bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
+      // Border
       if (frame.hasBorder) {
         ctx.strokeStyle = frame.borderColor;
-        ctx.lineWidth = frame.borderStyle === 'dashed' ? 4 : 6;
-        if (frame.borderStyle === 'dashed') ctx.setLineDash([12, 6]);
+        ctx.lineWidth = frame.dashed ? 4 : 6;
+        if (frame.dashed) ctx.setLineDash([12, 6]);
         ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
         ctx.setLineDash([]);
       }
       
+      // Background image
       if (backgroundImage) {
         ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
       }
       
+      // Draw elements
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
       });
@@ -370,53 +357,16 @@
         ctx.drawImage(el.image, -nativeW/2, -nativeH/2, nativeW, nativeH);
       }
       
+      // Selection indicator (simple)
       if (selected) {
-        // Draw selection box
+        ctx.restore();
+        ctx.save();
+        ctx.translate(el.x, el.y);
         ctx.strokeStyle = '#FF9D00';
-        ctx.lineWidth = 2;
+        ctx.lineWidth = 3;
         ctx.setLineDash([6, 3]);
-        ctx.strokeRect(-nativeW/2 - 3, -nativeH/2 - 3, nativeW + 6, nativeH + 6);
+        ctx.strokeRect(-nativeW/2 - 5, -nativeH/2 - 5, nativeW + 10, nativeH + 10);
         ctx.setLineDash([]);
-        
-        // Draw resize handles (corners)
-        const hs = 12; // handle size
-        ctx.fillStyle = '#FF9D00';
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        
-        // Bottom-right handle
-        ctx.fillRect(nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
-        ctx.strokeRect(nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
-        
-        // Bottom-left handle
-        ctx.fillRect(-nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
-        ctx.strokeRect(-nativeW/2 - hs/2, nativeH/2 - hs/2, hs, hs);
-        
-        // Top-right handle
-        ctx.fillRect(nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
-        ctx.strokeRect(nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
-        
-        // Top-left handle
-        ctx.fillRect(-nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
-        ctx.strokeRect(-nativeW/2 - hs/2, -nativeH/2 - hs/2, hs, hs);
-        
-        // Draw rotate handle (top center with arc)
-        const rotY = -nativeH/2 - 30;
-        ctx.beginPath();
-        ctx.arc(0, rotY, 10, 0, Math.PI * 2);
-        ctx.fillStyle = '#FF9D00';
-        ctx.fill();
-        ctx.strokeStyle = '#000';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-        
-        // Draw line from element to rotate handle
-        ctx.beginPath();
-        ctx.moveTo(0, -nativeH/2);
-        ctx.lineTo(0, rotY + 10);
-        ctx.strokeStyle = '#FF9D00';
-        ctx.lineWidth = 2;
-        ctx.stroke();
       }
       
       ctx.restore();
@@ -428,31 +378,12 @@
         const el = elements[i];
         const { w: nw, h: nh } = getDisplaySize(el);
         const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
-        if (dist < Math.max(nw, nh) / 2) return { el, dist };
+        if (dist < Math.max(nw, nh) / 2 + 10) return el;
       }
       return null;
     }
     
-    // Get resize handle at position
-    function getResizeHandle(el, x, y) {
-      if (!el || el.type !== 'image') return null;
-      const { w: nw, h: nh } = getDisplaySize(el);
-      const hs = 15;
-      const handles = [
-        { name: 'br', x: el.x + nw/2, y: el.y + nh/2 },
-        { name: 'bl', x: el.x - nw/2, y: el.y + nh/2 },
-        { name: 'tr', x: el.x + nw/2, y: el.y - nh/2 },
-        { name: 'tl', x: el.x - nw/2, y: el.y - nh/2 },
-        { name: 'rot', x: el.x, y: el.y - nh/2 - 30 }
-      ];
-      
-      for (const h of handles) {
-        if (Math.abs(x - h.x) < hs && Math.abs(y - h.y) < hs) return h.name;
-      }
-      return null;
-    }
-    
-    // Get canvas coordinates from event
+    // Get canvas coordinates
     function getCanvasCoords(e) {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -465,7 +396,7 @@
       };
     }
     
-    // Pointer down handler
+    // Pointer handlers
     function onPointerDown(e) {
       e.preventDefault();
       const { x, y } = getCanvasCoords(e);
@@ -475,25 +406,10 @@
         return;
       }
       
-      const hit = getElementAt(x, y);
-      if (hit) {
-        const { el } = hit;
-        const handle = getResizeHandle(el, x, y);
-        
-        if (handle === 'rot') {
-          isRotating = true;
-          selectedElement = el;
-        } else if (handle && handle !== 'rot') {
-          isResizing = true;
-          resizeHandle = handle;
-          selectedElement = el;
-        } else if (selectedElement === el) {
-          isDragging = true;
-        } else {
-          selectedElement = el;
-          isDragging = true;
-        }
-        
+      const el = getElementAt(x, y);
+      if (el) {
+        selectedElement = el;
+        isDragging = true;
         dragOffset = { x: x - el.x, y: y - el.y };
         draw();
       } else {
@@ -502,55 +418,19 @@
       }
     }
     
-    // Pointer move handler
     function onPointerMove(e) {
       e.preventDefault();
-      if (!selectedElement) return;
+      if (!isDragging || !selectedElement) return;
       
       const { x, y } = getCanvasCoords(e);
-      
-      if (isDragging) {
-        selectedElement.x = x - dragOffset.x;
-        selectedElement.y = y - dragOffset.y;
-      } else if (isResizing && resizeHandle) {
-        const dx = x - selectedElement.x;
-        const dy = y - selectedElement.y;
-        const angle = selectedElement.rotation * Math.PI / 180;
-        const localX = dx * Math.cos(-angle) - dy * Math.sin(-angle);
-        const localY = dx * Math.sin(-angle) + dy * Math.cos(-angle);
-        
-        const baseSize = selectedElement.baseSize || selectedElement.size;
-        let newSize = baseSize;
-        
-        if (resizeHandle.includes('r')) newSize += localX * 0.5;
-        if (resizeHandle.includes('l')) newSize -= localX * 0.5;
-        if (resizeHandle.includes('b')) newSize += localY * 0.5;
-        if (resizeHandle.includes('t')) newSize -= localY * 0.5;
-        
-        newSize = Math.max(10, Math.min(300, newSize));
-        selectedElement.size = newSize;
-        document.getElementById('sizeVal').textContent = Math.round(newSize) + '%';
-      } else if (isRotating) {
-        const dx = x - selectedElement.x;
-        const dy = y - selectedElement.y;
-        let angle = Math.atan2(dx, -dy) * 180 / Math.PI + 90;
-        angle = Math.round(angle / 5) * 5; // Snap to 5 degrees
-        if (angle < 0) angle += 360;
-        if (angle >= 360) angle -= 360;
-        selectedElement.rotation = angle;
-        document.getElementById('rotateVal').textContent = angle + '°';
-      }
-      
+      selectedElement.x = x - dragOffset.x;
+      selectedElement.y = y - dragOffset.y;
       draw();
     }
     
-    // Pointer up handler
     function onPointerUp(e) {
       e.preventDefault();
       isDragging = false;
-      isResizing = false;
-      isRotating = false;
-      resizeHandle = null;
     }
     
     function addCone() {
@@ -563,28 +443,14 @@
       const el = {
         type: 'image',
         image: coneImage,
-        x: frame.coneDefaultPos.x,
-        y: frame.coneDefaultPos.y,
-        size: frame.coneDefaultSize,
-        baseSize: frame.coneDefaultSize,
+        x: frame.pos.x,
+        y: frame.pos.y,
+        size: frame.size,
         rotation: 0,
       };
       
       elements.push(el);
-      selectElement(el);
-      draw();
-      showBurst('POW!', el.x, el.y);
-    }
-    
-    function selectElement(el) {
       selectedElement = el;
-      draw();
-    }
-    
-    function deleteSelected() {
-      if (!selectedElement) return;
-      elements = elements.filter(e => e !== selectedElement);
-      selectedElement = null;
       draw();
     }
     
@@ -592,8 +458,22 @@
       document.querySelectorAll('.frame-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       currentFrame = btn.dataset.frame;
+      
+      // Reset cone position for new frame
+      if (elements.length > 0) {
+        const frame = frames[currentFrame];
+        elements[0].x = frame.pos.x;
+        elements[0].y = frame.pos.y;
+        elements[0].size = frame.size;
+        draw();
+      }
+    }
+    
+    function deleteSelected() {
+      if (!selectedElement) return;
+      elements = elements.filter(e => e !== selectedElement);
+      selectedElement = null;
       draw();
-      showBurst('FRAME!', canvas.width/2, canvas.height - 50);
     }
     
     function downloadImage() {
@@ -608,17 +488,6 @@
       
       selectedElement = wasSelected;
       draw();
-      showBurst('SAVED!', canvas.width/2, canvas.height - 50);
-    }
-    
-    function showBurst(text, x, y) {
-      const burst = document.createElement('div');
-      burst.className = 'conify-burst';
-      burst.textContent = text;
-      burst.style.left = x + 'px';
-      burst.style.top = y + 'px';
-      document.body.appendChild(burst);
-      setTimeout(() => burst.remove(), 700);
     }
     
     // Event listeners
@@ -642,7 +511,6 @@
         img.onload = () => {
           backgroundImage = img;
           draw();
-          showBurst('UPLOADED!', canvas.width/2, 40);
         };
         img.src = event.target.result;
       };
