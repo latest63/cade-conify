@@ -62,18 +62,22 @@
       font-size: 3.5rem;
       letter-spacing: 4px;
       color: var(--orange);
-      text-shadow: 
-        3px 3px 0 var(--black-outline),
-        -1px -1px 0 var(--black-outline),
-        1px -1px 0 var(--black-outline),
-        -1px 1px 0 var(--black-outline);
+      text-shadow: none;
+      -webkit-text-stroke: 2px #fff;
+      paint-order: stroke fill;
       transform: rotate(-2deg);
-      display: inline-block;
-      line-height: 1;
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
     }
 
     .logo span {
       color: var(--purple);
+      -webkit-text-stroke: 2px #fff;
+      paint-order: stroke fill;
+      display: inline-block;
+      transform: rotate(0deg);
+      margin-bottom: -5px;
     }
 
     .tagline {
