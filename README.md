@@ -1,29 +1,18 @@
-# Party Cone PFP
+# CADE Conify
+Browser-based PFP editor with CADE party cone overlay.
 
-Browser-based PFP editor with cartoon party elements.
+## Tech
+- Pure HTML/CSS/JS (single file, no dependencies)
+- Google Fonts: Bangers (display), Space Grotesk (UI)
+- Static hosting ready
 
-## Features
-- Upload your profile picture
-- Add party elements: cones 💥, splashes 💥, bangs 💫, bubbles 💬, stars ⭐, confetti ✨, balloons 🎈, sparkles 💎
-- Drag, resize, and rotate elements
-- Add custom text
-- Download as PNG
-
-## Theme
-- Primary: Black (#0a0a0a)
-- Secondary: Dark Yellow (#f5c518)
-- Accents: White
-
-## Usage
-
-```bash
-cd /home/ubuntu/party-cone-pfp
-python3 server.py
-```
-
-Then open http://localhost:8000
+## Deploy to Vercel
+1. Push to GitHub
+2. Import repo in Vercel dashboard
+3. Framework Preset: Other
+4. Deploy
 
 ## Files
-- `index.html` - Main app (single-file, no dependencies)
-- `server.py` - Simple HTTP server
-- `README.md` - This file
+- `index.html` — Main app
+- `cone.png` — CADE party cone asset
+- `README.md` — This file
