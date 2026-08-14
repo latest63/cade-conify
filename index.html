@@ -32,7 +32,6 @@
       overflow-x: hidden;
     }
 
-    /* Halftone noise overlay */
     body::before {
       content: '';
       position: fixed;
@@ -51,18 +50,13 @@
       padding: 20px;
     }
 
-    /* Header */
-    header {
-      text-align: center;
-      padding: 30px 0 20px;
-    }
+    header { text-align: center; padding: 30px 0 20px; }
 
     .logo {
       font-family: 'Bangers', cursive;
       font-size: 3.5rem;
       letter-spacing: 4px;
       color: var(--orange);
-      text-shadow: none;
       -webkit-text-stroke: 2px #fff;
       paint-order: stroke fill;
       transform: rotate(-2deg);
@@ -86,22 +80,8 @@
       margin-top: 8px;
     }
 
-    /* Starburst decoration */
-    .starburst {
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      opacity: 0.15;
-      pointer-events: none;
-    }
-
-    .starburst-1 { top: 60px; right: 80px; animation: spin 20s linear infinite; }
-    .starburst-2 { top: 300px; left: 40px; animation: spin 15s linear infinite reverse; }
-    .starburst-3 { bottom: 100px; right: 60px; animation: spin 25s linear infinite; }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Main layout */
     .editor-layout {
       display: flex;
       gap: 24px;
@@ -113,11 +93,7 @@
       .editor-layout { flex-direction: column; align-items: center; }
     }
 
-    /* Canvas area */
-    .canvas-stage {
-      flex: 1;
-      max-width: 520px;
-    }
+    .canvas-stage { flex: 1; max-width: 520px; }
 
     .canvas-wrapper {
       position: relative;
@@ -135,7 +111,6 @@
       cursor: crosshair;
     }
 
-    /* Comic explosion when conified */
     .conify-burst {
       position: fixed;
       pointer-events: none;
@@ -153,7 +128,6 @@
       100% { transform: scale(1) rotate(0deg) translateY(-40px); opacity: 0; }
     }
 
-    /* Sidebar */
     .sidebar {
       width: 280px;
       display: flex;
@@ -162,7 +136,6 @@
       flex-shrink: 0;
     }
 
-    /* Cards */
     .card {
       background: var(--bg-card);
       border: 2px solid #2a2a2a;
@@ -172,9 +145,7 @@
       transition: transform 0.15s;
     }
 
-    .card:hover {
-      transform: translate(-1px, -1px);
-    }
+    .card:hover { transform: translate(-1px, -1px); }
 
     .card-title {
       font-family: 'Bangers', cursive;
@@ -197,7 +168,6 @@
       clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     }
 
-    /* Upload button */
     .upload-btn {
       display: flex;
       align-items: center;
@@ -216,16 +186,6 @@
       cursor: pointer;
       box-shadow: 3px 3px 0 var(--black-outline);
       transition: all 0.1s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .upload-btn::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-      pointer-events: none;
     }
 
     .upload-btn:hover {
@@ -241,37 +201,31 @@
 
     input[type="file"] { display: none; }
 
-    /* Element grid */
-    .elements-grid {
+    /* Frame selector */
+    .frame-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
     }
 
-    .element-btn {
+    .frame-btn {
       background: #1e1e1e;
       border: 2px solid #333;
       border-radius: 4px;
-      padding: 12px 4px;
+      padding: 12px 8px;
       color: #fff;
-      font-size: 1.4rem;
+      font-size: 0.7rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.1s;
       box-shadow: 2px 2px 0 var(--black-outline);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-    }
-
-    .element-btn .label {
-      font-size: 0.55rem;
+      text-align: center;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #888;
     }
 
-    .element-btn:hover {
+    .frame-btn:hover {
       background: var(--orange);
       color: #000;
       border-color: var(--orange);
@@ -279,21 +233,26 @@
       box-shadow: 3px 3px 0 var(--black-outline);
     }
 
-    .element-btn:active {
-      transform: translate(1px, 1px);
-      box-shadow: 1px 1px 0 var(--black-outline);
-    }
-
-    .element-btn.selected {
+    .frame-btn.active {
       background: var(--purple);
       border-color: var(--purple);
       color: #fff;
     }
 
-    /* Sliders */
-    .slider-group {
-      margin-bottom: 14px;
+    .frame-btn .frame-preview {
+      width: 100%;
+      height: 40px;
+      background: #0a0a0a;
+      border-radius: 2px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
     }
+
+    /* Sliders */
+    .slider-group { margin-bottom: 14px; }
 
     .slider-group label {
       display: flex;
@@ -305,10 +264,7 @@
       margin-bottom: 6px;
     }
 
-    .slider-group label span {
-      color: var(--orange);
-      font-weight: 700;
-    }
+    .slider-group label span { color: var(--orange); font-weight: 700; }
 
     input[type="range"] {
       width: 100%;
@@ -316,12 +272,7 @@
       cursor: pointer;
     }
 
-    /* Action buttons */
-    .action-row {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .action-row { display: flex; flex-direction: column; gap: 8px; }
 
     .action-btn {
       width: 100%;
@@ -341,43 +292,13 @@
       gap: 8px;
     }
 
-    .action-btn:hover {
-      transform: translate(-1px, -1px);
-      box-shadow: 4px 4px 0 var(--black-outline);
-    }
+    .action-btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--black-outline); }
+    .action-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--black-outline); }
 
-    .action-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 1px 1px 0 var(--black-outline);
-    }
+    .action-btn.orange { background: var(--orange); color: #000; }
+    .action-btn.purple { background: var(--purple); color: #fff; }
+    .action-btn.red { background: var(--red); color: #fff; }
 
-    .action-btn.orange {
-      background: var(--orange);
-      color: #000;
-    }
-
-    .action-btn.purple {
-      background: var(--purple);
-      color: #fff;
-    }
-
-    .action-btn.red {
-      background: var(--red);
-      color: #fff;
-    }
-
-    .action-btn.dark {
-      background: #2a2a2a;
-      color: #fff;
-      border: 2px solid #444;
-    }
-
-    .action-btn.dark:hover {
-      background: #333;
-      border-color: var(--orange);
-    }
-
-    /* Instructions */
     .hint-bar {
       background: #1a1a1a;
       border-left: 3px solid var(--orange);
@@ -391,7 +312,6 @@
 
     .hint-bar strong { color: var(--orange); }
 
-    /* Lightning bolt decoration */
     .lightning {
       position: fixed;
       opacity: 0.04;
@@ -405,7 +325,6 @@
     .lightning-1 { top: -50px; left: -50px; }
     .lightning-2 { bottom: -80px; right: -30px; color: var(--purple); }
 
-    /* Ripped edge effect */
     .ripped-edge {
       height: 8px;
       background: var(--bg-deep);
@@ -417,37 +336,27 @@
   </style>
 </head>
 <body>
-  <!-- Background decorations -->
   <div class="lightning lightning-1">⚡</div>
   <div class="lightning lightning-2">⚡</div>
-
-  <svg style="position:absolute;top:80px;right:60px;width:100px;height:100px;opacity:0.1" viewBox="0 0 100 100">
-    <polygon points="50,5 61,35 95,38 70,60 76,95 50,75 24,95 30,60 5,38 39,35" fill="#FF9D00"/>
-  </svg>
-  <svg style="position:absolute;top:280px;left:30px;width:80px;height:80px;opacity:0.08;animation:spin 12s linear infinite" viewBox="0 0 100 100">
-    <polygon points="50,5 61,35 95,38 70,60 76,95 50,75 24,95 30,60 5,38 39,35" fill="#8B2CFF"/>
-  </svg>
 
   <div class="app-shell">
     <header>
       <h1 class="logo">CADE <span>CONIFY</span></h1>
-      <p class="tagline">☠️ Party cone your PFP ☠️</p>
+      <p class="tagline">☠️ Meme Madness Edition ☠️</p>
     </header>
 
     <div class="ripped-edge"></div>
 
     <div class="editor-layout">
-      <!-- Canvas Stage -->
       <div class="canvas-stage">
         <div class="canvas-wrapper">
           <canvas id="canvas" width="500" height="500"></canvas>
         </div>
         <div class="hint-bar" style="margin-top: 10px;">
-          <strong>How to:</strong> Upload PFP → Pick element → Click canvas to place → Drag to move → Sliders to resize/rotate → Download
+          <strong>How to:</strong> Upload PFP → Pick frame → Click to place cone → Drag to move → Adjust size/rotate → Download
         </div>
       </div>
 
-      <!-- Sidebar -->
       <div class="sidebar">
         <!-- Upload -->
         <div class="card">
@@ -458,42 +367,31 @@
           </button>
         </div>
 
-        <!-- Elements -->
+        <!-- Frames -->
         <div class="card">
-          <div class="card-title">Pick Element</div>
-          <div class="elements-grid">
-            <button class="element-btn" data-type="cone" title="CADE Party Cone">
-              🎉<span class="label">Cone</span>
+          <div class="card-title">Select Frame</div>
+          <div class="frame-grid">
+            <button class="frame-btn active" data-frame="meme-madness" onclick="selectFrame(this)">
+              <div class="frame-preview">🎯</div>
+              Meme Madness
             </button>
-            <button class="element-btn" data-type="splash" title="Explosion">
-              💥<span class="label">Boom</span>
+            <button class="frame-btn" data-frame="qualifier" onclick="selectFrame(this)">
+              <div class="frame-preview">🏆</div>
+              Qualifier
             </button>
-            <button class="element-btn" data-type="bang" title="Spark Bang">
-              💫<span class="label">Bang</span>
+            <button class="frame-btn" data-frame="battle" onclick="selectFrame(this)">
+              <div class="frame-preview">⚔️</div>
+              Battle
             </button>
-            <button class="element-btn" data-type="bubble" title="Bubble Chat">
-              💬<span class="label">Chat</span>
-            </button>
-            <button class="element-btn" data-type="star" title="Star Burst">
-              ⭐<span class="label">Star</span>
-            </button>
-            <button class="element-btn" data-type="confetti" title="Confetti">
-              ✨<span class="label">Confetti</span>
-            </button>
-            <button class="element-btn" data-type="balloon" title="Balloon">
-              🎈<span class="label">Balloon</span>
-            </button>
-            <button class="element-btn" data-type="skull" title="Skull">
-              💀<span class="label">Skull</span>
-            </button>
-            <button class="element-btn" data-type="text" title="Add Text">
-              🔤<span class="label">Text</span>
+            <button class="frame-btn" data-frame="classic" onclick="selectFrame(this)">
+              <div class="frame-preview">🎉</div>
+              Classic
             </button>
           </div>
         </div>
 
         <!-- Transform -->
-        <div class="card" id="transform-panel">
+        <div class="card">
           <div class="card-title">Transform</div>
           <div class="slider-group">
             <label>Size <span id="size-val">100%</span></label>
@@ -509,8 +407,7 @@
         <div class="card">
           <div class="card-title">Actions</div>
           <div class="action-row">
-            <button class="action-btn purple" onclick="addCustomText()">+ Add Text</button>
-            <button class="action-btn red" onclick="deleteSelected()">🗑 Delete Selected</button>
+            <button class="action-btn red" onclick="deleteSelected()">🗑 Delete Cone</button>
             <button class="action-btn orange" onclick="downloadImage()">⬇ Download PNG</button>
           </div>
         </div>
@@ -527,51 +424,79 @@
     let selectedElement = null;
     let isDragging = false;
     let dragOffset = { x: 0, y: 0 };
+    let currentFrame = 'meme-madness';
     
     // Load the actual cone image
     const coneImage = new Image();
     coneImage.src = 'cone.png';
     coneImage.crossOrigin = 'anonymous';
-
-    // Element definitions
-    const elementTypes = {
-      cone: { type: 'image', src: coneImage, defaultSize: 200, defaultPos: { x: 250, y: 20 } },
-      splash: { emoji: '💥', defaultSize: 100, defaultPos: { x: 120, y: 130 } },
-      bang: { emoji: '💫', defaultSize: 80, defaultPos: { x: 380, y: 90 } },
-      bubble: { emoji: '💬', defaultSize: 90, defaultPos: { x: 90, y: 350 } },
-      star: { emoji: '⭐', defaultSize: 70, defaultPos: { x: 410, y: 280 } },
-      confetti: { emoji: '✨', defaultSize: 80, defaultPos: { x: 180, y: 420 } },
-      balloon: { emoji: '🎈', defaultSize: 85, defaultPos: { x: 320, y: 180 } },
-      skull: { emoji: '💀', defaultSize: 75, defaultPos: { x: 430, y: 400 } },
+    
+    // Frame configurations
+    const frames = {
+      'meme-madness': {
+        name: 'Meme Madness',
+        bgColor: '#1a0a00',
+        accentColor: '#FF9D00',
+        hasBorder: true,
+        borderColor: '#FF9D00',
+        borderStyle: 'solid',
+        coneDefaultPos: { x: 250, y: 100 },
+        coneDefaultSize: 180,
+      },
+      'qualifier': {
+        name: 'Qualifier',
+        bgColor: '#0a1a0a',
+        accentColor: '#00E676',
+        hasBorder: true,
+        borderColor: '#00E676',
+        borderStyle: 'solid',
+        coneDefaultPos: { x: 250, y: 100 },
+        coneDefaultSize: 180,
+      },
+      'battle': {
+        name: 'Battle',
+        bgColor: '#1a0a1a',
+        accentColor: '#8B2CFF',
+        hasBorder: true,
+        borderColor: '#8B2CFF',
+        borderStyle: 'dashed',
+        coneDefaultPos: { x: 250, y: 100 },
+        coneDefaultSize: 180,
+      },
+      'classic': {
+        name: 'Classic',
+        bgColor: '#101010',
+        accentColor: '#FF9D00',
+        hasBorder: false,
+        coneDefaultPos: { x: 250, y: 80 },
+        coneDefaultSize: 160,
+      }
     };
 
-    // Halftone pattern for background
-    function createHalftonePattern() {
-      const patternCanvas = document.createElement('canvas');
-      patternCanvas.width = 8;
-      patternCanvas.height = 8;
-      const pctx = patternCanvas.getContext('2d');
-      pctx.fillStyle = '#151515';
-      pctx.fillRect(0, 0, 8, 8);
-      pctx.fillStyle = '#1a1a1a';
-      pctx.beginPath();
-      pctx.arc(4, 4, 1.5, 0, Math.PI * 2);
-      pctx.fill();
-      return patternCanvas;
-    }
-
-    // Draw initial state
     function draw() {
-      // Fill background with halftone-like pattern
-      ctx.fillStyle = '#151515';
+      const frame = frames[currentFrame];
+      
+      // Clear with frame background
+      ctx.fillStyle = frame.bgColor;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Draw halftone dots
-      ctx.fillStyle = '#1a1a1a';
+      // Draw border if enabled
+      if (frame.hasBorder) {
+        ctx.strokeStyle = frame.borderColor;
+        ctx.lineWidth = frame.borderStyle === 'dashed' ? 4 : 6;
+        if (frame.borderStyle === 'dashed') {
+          ctx.setLineDash([12, 6]);
+        }
+        ctx.strokeRect(8, 8, canvas.width - 16, canvas.height - 16);
+        ctx.setLineDash([]);
+      }
+      
+      // Draw halftone pattern
+      ctx.fillStyle = 'rgba(255,255,255,0.02)';
       for (let x = 4; x < canvas.width; x += 8) {
         for (let y = 4; y < canvas.height; y += 8) {
           ctx.beginPath();
-          ctx.arc(x, y, 1.5, 0, Math.PI * 2);
+          ctx.arc(x, y, 1, 0, Math.PI * 2);
           ctx.fill();
         }
       }
@@ -581,7 +506,7 @@
         ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
       }
       
-      // Draw elements
+      // Draw elements (cone)
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
       });
@@ -593,28 +518,12 @@
       ctx.rotate(el.rotation * Math.PI / 180);
       ctx.scale(el.size / 100, el.size / 100);
       
-      // Image elements (like the cone)
       if (el.type === 'image' && el.image && el.image.complete) {
         const w = el.image.naturalWidth;
         const h = el.image.naturalHeight;
         ctx.drawImage(el.image, -w/2, -h/2, w, h);
-      } else if (el.type === 'text') {
-        ctx.font = 'bold 48px Bangers, cursive';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.strokeStyle = '#0a0a0a';
-        ctx.lineWidth = 6;
-        ctx.strokeText(el.emoji, 0, 0);
-        ctx.fillStyle = '#FF9D00';
-        ctx.fillText(el.emoji, 0, 0);
-      } else {
-        ctx.font = '80px serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(el.emoji, 0, 0);
       }
       
-      // Selection indicator - comic style
       if (selected) {
         ctx.restore();
         ctx.save();
@@ -622,15 +531,14 @@
         ctx.strokeStyle = '#FF9D00';
         ctx.lineWidth = 3;
         ctx.setLineDash([8, 4]);
-        const half = el.size / 2;
-        ctx.strokeRect(-half, -half, half * 2, half * 2);
+        const half = el.size * 200 / 100;
+        ctx.strokeRect(-half/2, -half/2, half, half);
         ctx.setLineDash([]);
       }
       
       ctx.restore();
     }
     
-    // Upload handler
     document.getElementById('upload').addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (!file) return;
@@ -641,72 +549,46 @@
         img.onload = () => {
           backgroundImage = img;
           draw();
-          showBurst('UPLOAD!', canvas.width/2, 40);
+          showBurst('UPLOADED!', canvas.width/2, 40);
         };
         img.src = event.target.result;
       };
       reader.readAsDataURL(file);
     });
     
-    // Element buttons
-    document.querySelectorAll('.element-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const type = btn.dataset.type;
-        if (type === 'text') {
-          addCustomText();
-          return;
-        }
-        addElement(type);
-      });
-    });
-    
-    function addElement(type) {
-      const def = elementTypes[type];
-      if (!def) return;
+    function selectFrame(btn) {
+      document.querySelectorAll('.frame-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentFrame = btn.dataset.frame;
       
-      let el;
-      if (def.type === 'image') {
-        el = {
-          type: 'image',
-          image: def.src,
-          x: def.defaultPos.x,
-          y: def.defaultPos.y,
-          size: def.defaultSize,
-          rotation: 0,
-        };
-      } else {
-        el = {
-          type,
-          emoji: def.emoji,
-          x: def.defaultPos.x,
-          y: def.defaultPos.y,
-          size: def.defaultSize,
-          rotation: 0,
-        };
+      // Reset cone position for new frame
+      if (elements.length > 0) {
+        const frame = frames[currentFrame];
+        elements[0].x = frame.coneDefaultPos.x;
+        elements[0].y = frame.coneDefaultPos.y;
+        elements[0].size = frame.coneDefaultSize;
+        updateTransform();
       }
+      
+      draw();
+      showBurst('FRAME!', canvas.width/2, canvas.height - 50);
+    }
+    
+    function addCone() {
+      const frame = frames[currentFrame];
+      const el = {
+        type: 'image',
+        image: coneImage,
+        x: frame.coneDefaultPos.x,
+        y: frame.coneDefaultPos.y,
+        size: frame.coneDefaultSize,
+        rotation: 0,
+      };
       
       elements.push(el);
       selectElement(el);
       draw();
       showBurst('POW!', el.x, el.y);
-    }
-    
-    function addCustomText() {
-      const text = prompt('Enter your text:', 'CADE');
-      if (!text) return;
-      
-      elements.push({
-        type: 'text',
-        emoji: text,
-        x: 250,
-        y: 250,
-        size: 60,
-        rotation: 0,
-      });
-      
-      selectElement(elements[elements.length - 1]);
-      draw();
-      showBurst('WOW!', 250, 200);
     }
     
     function selectElement(el) {
@@ -731,7 +613,6 @@
       document.getElementById('rotate-val').textContent = selectedElement.rotation + '°';
     }
     
-    // Slider handlers
     document.getElementById('size').addEventListener('input', (e) => {
       if (!selectedElement) return;
       selectedElement.size = parseInt(e.target.value);
@@ -746,7 +627,6 @@
       draw();
     });
     
-    // Canvas interaction
     canvas.addEventListener('mousedown', (e) => {
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -754,11 +634,16 @@
       const x = (e.clientX - rect.left) * scaleX;
       const y = (e.clientY - rect.top) * scaleY;
       
-      // Find clicked element (reverse order for top-most)
+      if (elements.length === 0) {
+        // Add cone on first click
+        addCone();
+        return;
+      }
+      
       for (let i = elements.length - 1; i >= 0; i--) {
         const el = elements[i];
         const dist = Math.sqrt((x - el.x) ** 2 + (y - el.y) ** 2);
-        if (dist < el.size / 2) {
+        if (dist < el.size * 1.5) {
           selectElement(el);
           isDragging = true;
           dragOffset = { x: x - el.x, y: y - el.y };
@@ -766,7 +651,6 @@
         }
       }
       
-      // Clicked empty space
       selectedElement = null;
       updateTransform();
       draw();
@@ -783,15 +667,9 @@
       draw();
     });
     
-    canvas.addEventListener('mouseup', () => {
-      isDragging = false;
-    });
+    canvas.addEventListener('mouseup', () => { isDragging = false; });
+    canvas.addEventListener('mouseleave', () => { isDragging = false; });
     
-    canvas.addEventListener('mouseleave', () => {
-      isDragging = false;
-    });
-    
-    // Burst animation
     function showBurst(text, x, y) {
       const burst = document.createElement('div');
       burst.className = 'conify-burst';
@@ -802,14 +680,13 @@
       setTimeout(() => burst.remove(), 700);
     }
     
-    // Download
     function downloadImage() {
       const wasSelected = selectedElement;
       selectedElement = null;
       draw();
       
       const link = document.createElement('a');
-      link.download = 'cade-conify.png';
+      link.download = `cade-meme-madness-${currentFrame}.png`;
       link.href = canvas.toDataURL('image/png');
       link.click();
       
@@ -818,7 +695,6 @@
       showBurst('SAVED!', canvas.width/2, canvas.height - 50);
     }
     
-    // Initial draw
     draw();
   </script>
 </body>
