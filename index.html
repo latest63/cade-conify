@@ -263,7 +263,7 @@
           <canvas id="canvas" width="1000" height="1000"></canvas>
         </div>
         <div class="hint-bar">
-          <strong>Tap Add Cone</strong> · <strong>Select</strong> cone to pinch/drag · <strong>Two-finger twist</strong> to rotate
+          <strong>Tap Add</strong> to place elements · <strong>Select</strong> to pinch/drag/rotate
         </div>
       </div>
 
@@ -275,11 +275,8 @@
         </div>
 
         <div class="tray-section">
-          <div class="tray-label">Frame</div>
-          <div class="frame-grid">
-            <button class="frame-btn active" data-frame="rect-1" onclick="selectFrame(this)">Rect 1</button>
-            <button class="frame-btn" data-frame="rect-2" onclick="selectFrame(this)">Rect 2</button>
-          </div>
+          <div class="tray-label">Badge</div>
+          <button class="action-btn cone-btn" onclick="addBadge()">🏅 Add Badge</button>
         </div>
 
         <div class="tray-section">
@@ -325,15 +322,10 @@
       draw();
     };
     
-    // Draw rectangular frames (no fill, just outline)
-    function drawRectFrame(ctx, x, y, w, h, style) {
-      ctx.strokeStyle = style.color || '#FF9D00';
-      ctx.lineWidth = style.width || 6;
-      if (style.dashed) ctx.setLineDash(style.dashPattern || [12, 6]);
-      
-      ctx.strokeRect(x + 8, y + 8, w - 16, h - 16);
-      ctx.setLineDash([]);
-    }
+    // Frames - removed, using badges now
+    const badgeImage = new Image();
+    badgeImage.crossOrigin = 'anonymous';
+    badgeImage.src = 'badge1.png';
     
     // Get display size of an element
     function getDisplaySize(el) {
@@ -400,13 +392,6 @@
       ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       
-      // Rectangular frame - no background color, just outline
-      const rectStyles = {
-        'rect-1': { color: '#FF9D00', width: 6 },
-        'rect-2': { color: '#8B2CFF', width: 8, dashed: true, dashPattern: [15, 8] }
-      };
-      const style = rectStyles[currentFrame] || rectStyles['rect-1'];
-      
       // Draw PFP scaled to fill canvas
       if (backgroundImage) {
         ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -415,10 +400,7 @@
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
       
-      // Draw frame border
-      drawRectFrame(ctx, 0, 0, canvas.width, canvas.height, style);
-      
-      // Draw cone elements
+      // Draw elements (cone and badges)
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
       });
@@ -629,28 +611,39 @@
         setTimeout(addCone, 50);
         return;
       }
-      
-      // Position cone centered at smaller default size
+
       const el = {
         type: 'image',
         image: coneImage,
         x: 250,
         y: 250,
-        size: 40,  // 40% of natural size = ~480px wide on 500px canvas
+        size: 40,
         rotation: 0,
       };
-      
+
       elements.push(el);
       selectedElement = el;
       draw();
     }
-    
-    let currentFrame = 'rect-1';
-    
-    function selectFrame(btn) {
-      document.querySelectorAll('.frame-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFrame = btn.dataset.frame;
+
+    function addBadge() {
+      if (!badgeImage.complete) {
+        setTimeout(addBadge, 50);
+        return;
+      }
+
+      // Badge is wide (2184x720), place at bottom-center with appropriate size
+      const el = {
+        type: 'image',
+        image: badgeImage,
+        x: 500,  // center of 1000px canvas
+        y: 850,  // near bottom
+        size: 35,  // 35% to fit nicely as a banner
+        rotation: 0,
+      };
+
+      elements.push(el);
+      selectedElement = el;
       draw();
     }
     
