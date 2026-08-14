@@ -391,7 +391,7 @@
       // Clear
       ctx.fillStyle = '#101010';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      
+
       // Draw PFP scaled to fill canvas
       if (backgroundImage) {
         ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -399,7 +399,21 @@
         ctx.fillStyle = '#2a2a2a';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
-      
+
+      // Show upload placeholder when no elements and no background
+      if (elements.length === 0 && !backgroundImage) {
+        ctx.fillStyle = '#666';
+        ctx.font = '40px Bangers';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('📁', canvas.width / 2, canvas.height / 2 - 30);
+        ctx.font = '28px Space Grotesk';
+        ctx.fillText('Upload PFP', canvas.width / 2, canvas.height / 2 + 30);
+        ctx.font = '20px Space Grotesk';
+        ctx.fillStyle = '#444';
+        ctx.fillText('or tap to add cone', canvas.width / 2, canvas.height / 2 + 70);
+      }
+
       // Draw elements (cone and badges)
       elements.forEach(el => {
         drawElement(el, el === selectedElement);
