@@ -71,6 +71,7 @@
       width: 100%;
       height: auto;
       display: block;
+      cursor: pointer;
     }
     /* Tray Layout */
     .tray {
@@ -237,6 +238,24 @@
 
     .hint-bar strong { color: var(--orange); }
 
+    /* Upload overlay for empty canvas */
+    .upload-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .canvas-stage {
+      position: relative;
+      width: 100%;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
     /* Slider styling */
     .slider-container {
       display: flex;
@@ -284,6 +303,8 @@
 
     <div class="editor-layout">
       <div class="canvas-stage">
+        <!-- Touch overlay for iOS tap-to-upload -->
+        <div id="uploadOverlay" class="upload-overlay"></div>
         <div class="canvas-wrapper">
           <canvas id="canvas" width="1000" height="800"></canvas>
         </div>
@@ -322,6 +343,7 @@
     let elements = [];
     let selectedElement = null;
     let selectedBadgeIndex = 0;
+    let uploadOverlay = document.getElementById('uploadOverlay');
 
     // State for interactions
     let interactionMode = null;
@@ -440,6 +462,11 @@
         ctx.font = '28px Space Grotesk';
         ctx.fillStyle = '#444';
         ctx.fillText('Tap anywhere to upload', canvas.width / 2, canvas.height / 2 + 80);
+      }
+
+      // Toggle overlay visibility
+      if (uploadOverlay) {
+        uploadOverlay.style.display = (elements.length === 0 && !backgroundImage) ? 'block' : 'none';
       }
 
       // Draw elements (cone and badges)
@@ -626,6 +653,7 @@
         const fileInput = document.getElementById('upload');
         if (fileInput && e.touches.length === 1) {
           e.preventDefault();
+          e.stopPropagation();
           fileInput.click();
           return;
         }
@@ -638,6 +666,31 @@
         handleTwoTouch(e);
       }
     }, { passive: false });
+
+    // Overlay click handler for iOS
+    const uploadOverlay = document.getElementById('uploadOverlay');
+    if (uploadOverlay) {
+      uploadOverlay.addEventListener('click', (e) => {
+        if (elements.length === 0 && !backgroundImage) {
+          e.preventDefault();
+          e.stopPropagation();
+          const fileInput = document.getElementById('upload');
+          if (fileInput) {
+            fileInput.click();
+          }
+        }
+      });
+      uploadOverlay.addEventListener('touchstart', (e) => {
+        if (elements.length === 0 && !backgroundImage) {
+          e.preventDefault();
+          e.stopPropagation();
+          const fileInput = document.getElementById('upload');
+          if (fileInput) {
+            fileInput.click();
+          }
+        }
+      }, { passive: false });
+    }
 
     // Click handler for upload when canvas is empty (desktop fallback)
     canvas.addEventListener('click', (e) => {
